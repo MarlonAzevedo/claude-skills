@@ -1,0 +1,6 @@
+# Gerenciado pelo app do Claude (skills da Anthropic sincronizadas)
+synced/
+
+# Artefatos gerados
+__pycache__/
+.harness-eval/
