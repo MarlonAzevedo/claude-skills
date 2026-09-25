@@ -163,7 +163,7 @@ patch nova.
 - Deploy: <feito | não pedido | sem processo definido>
 ```
 
-Se o projeto tiver skill ou rotina de registro de progresso, ofereça rodá-la.
+Ofereça rodar a skill `salvar` (usa a do projeto, se existir), para registrar a versão na memória do projeto.
 
 ## Regras duras
 

@@ -13,14 +13,15 @@ Este diretório é o próprio repositório: editou uma skill, é só commitar aq
 | `release` | Cortar versão: semver pelo CHANGELOG, tag anotada só com CI verde | adaptada de akitaonrails/my-skills (`release`) |
 | `atualizar-deps` | Consolidar Dependabot/Renovate e desatualizados num commit, com piso de supply chain | adaptada de akitaonrails/my-skills (`pr-bump`) |
 | `refletir` | Kaizen: transformar erros reais em regras e skills | adaptada de akitaonrails/my-skills (`reflect`) |
+| `salvar` | Registrar a sessão: docs do repo + memória de longo prazo (vault Obsidian do projeto se existir, senão [ai-memory](https://github.com/akitaonrails/ai-memory)) | própria |
 | `tlc-spec-lean` | Features novas: plan → checks → build → verificador independente | [tech-leads-club/agent-skills](https://github.com/tech-leads-club/agent-skills), CC-BY-4.0 |
 | `harness-eval` | Auditar CLAUDE.md/AGENTS.md e skills (caminhos quebrados, redundância) | tech-leads-club/agent-skills, CC-BY-4.0. `scripts/inventory_extract.py` alterado: pula citações fora do repo |
 | `security-best-practices` | Specs de código seguro por linguagem/framework | tech-leads-club/agent-skills (originalmente openai/skills), Apache-2.0 (`LICENSE.txt`) |
 
 ## Versão do projeto primeiro
 
-Skills pessoais têm precedência sobre as de projeto com o mesmo nome. Por isso as seis
-adaptadas começam por um Passo 0: se o repositório atual tiver `.claude/skills/<nome>/SKILL.md`,
+Skills pessoais têm precedência sobre as de projeto com o mesmo nome. Por isso as sete
+do fluxo começam por um Passo 0: se o repositório atual tiver `.claude/skills/<nome>/SKILL.md`,
 seguem a versão do projeto. Sem ela, descobrem gate, testes e convenções pelo
 `CLAUDE.md`/`AGENTS.md` e pelos arquivos do projeto.
 

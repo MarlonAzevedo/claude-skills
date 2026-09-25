@@ -47,7 +47,7 @@ Não presuma a stack. Levante e anote antes de codar:
 | Fonte | Como listar | Como fechar |
 |---|---|---|
 | Pedido direto do usuário | a conversa | relatório final |
-| Pendência do plano do projeto | `grep -n '\- \[ \]'` no arquivo de plano | oferecer a skill `salvar` do projeto, se existir; senão marcar no próprio plano |
+| Pendência do plano do projeto | `grep -n '\- \[ \]'` no arquivo de plano | oferecer a skill `salvar` (usa a do projeto, se existir) |
 | Issue do GitHub | `gh issue list --state open` | `Closes #N` no commit |
 | PR de bot de dependência | — | **não é aqui**: skill `atualizar-deps` |
 | Feature nova | — | **não é aqui**: skill `tlc-spec-lean` |
@@ -123,7 +123,7 @@ typecheck/lint do lado alterado limpos.
 
 - **Issue**: fecha quando o fix aterrissa com CI verde: `Closes #N` na mensagem
   e `gh issue view N` depois. Nunca deixe issue resolvida aberta esperando release.
-- **Pendência do plano**: ofereça a skill `salvar` do projeto, ou marque o item.
+- **Pendência do plano**: ofereça a skill `salvar`, que registra no plano e na memória de longo prazo do projeto.
 - Mudança visível ao usuário → linha no `CHANGELOG.md` (`Unreleased`/`Não
   lançado`), se o projeto mantiver um.
 
