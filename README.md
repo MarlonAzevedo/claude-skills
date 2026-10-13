@@ -13,6 +13,7 @@ Este diretório é o próprio repositório: editou uma skill, é só commitar aq
 | `release` | Cortar versão: semver pelo CHANGELOG, tag anotada só com CI verde | adaptada de akitaonrails/my-skills (`release`) |
 | `atualizar-deps` | Consolidar Dependabot/Renovate e desatualizados num commit, com piso de supply chain | adaptada de akitaonrails/my-skills (`pr-bump`) |
 | `refletir` | Kaizen: transformar erros reais em regras e skills | adaptada de akitaonrails/my-skills (`reflect`) |
+| `limpar` | Achar e remover arquivos desnecessários (lixo, artefato rastreado, duplicado, órfão) com prova de não uso, aprovação e gate; levantamento em `scripts/candidatos.sh` | própria |
 | `salvar` | Registrar a sessão: docs do repo + memória de longo prazo (vault Obsidian do projeto, se existir) | própria |
 | `tlc-spec-lean` | Features novas: plan → checks → build → verificador independente | [tech-leads-club/agent-skills](https://github.com/tech-leads-club/agent-skills), CC-BY-4.0 |
 | `harness-eval` | Auditar CLAUDE.md/AGENTS.md e skills (caminhos quebrados, redundância) | tech-leads-club/agent-skills, CC-BY-4.0. `scripts/inventory_extract.py` alterado: pula citações fora do repo |
@@ -43,8 +44,8 @@ ln -s ~/.claude/skills/_harness/hooks/captura-sessao.py ~/.claude/hooks/
 ```
 
 e acrescente ao `~/.claude/settings.json` os hooks `PreCompact` e `SessionEnd`
-com o comando `python3 -I ~/.claude/hooks/captura-sessao.py`. Teste:
-`python3 -I ~/.claude/skills/testes/test_captura_sessao.py`.
+com o comando `python3 -I ~/.claude/hooks/captura-sessao.py`. Testes:
+`for t in ~/.claude/skills/testes/test_*.py; do python3 -I "$t"; done`.
 
 ## `_harness/`
 
