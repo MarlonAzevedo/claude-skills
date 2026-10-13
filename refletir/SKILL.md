@@ -39,8 +39,10 @@ O slug do projeto em `~/.claude/projects/` é o caminho absoluto da raiz com
    (`PLAN*.md`, `PROGRESSO.md`, `CHANGELOG.md`, `docs/`).
 3. A memória do Claude do projeto: `~/.claude/projects/<slug>/memory/`.
    E a memória de longo prazo do projeto, validada como no Passo 1 da skill
-   `salvar`: o vault Obsidian do projeto (notas de armadilhas e bugs). Uma
-   armadilha que aparece lá mais de uma vez é candidata forte.
+   `salvar`: o vault Obsidian do projeto (notas de armadilhas e bugs) e os
+   rascunhos de sessão em `<vault>/_inbox/` (pedidos repetidos e correções em
+   série aparecem ali). Uma armadilha que aparece mais de uma vez é candidata
+   forte.
 4. Histórico git: `git log --since=<data> --format='%h %ad %s' --date=short`.
    Commit de correção logo depois de uma feature, revert e ida e volta de
    arquitetura são sinais fortes.

@@ -4,3 +4,7 @@ synced/
 # Artefatos gerados
 __pycache__/
 .harness-eval/
+
+# Links para skills do sistema (Omarchy)
+omarchy
+diagnose-crash

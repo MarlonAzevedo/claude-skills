@@ -205,8 +205,8 @@ senão um "nega tudo" passaria como correto.
 Nenhum candidato entra no relatório sem ser verificado por quem **não** o
 produziu:
 
-- Com subagentes: para cada candidato, um verificador novo cujo único trabalho
-  é **refutá-lo**. Entregue o achado, a evidência de código e o mínimo de
+- Com subagentes: para cada candidato, um subagente `verificador` novo (só
+  leitura) cujo único trabalho é **refutá-lo**. Entregue o achado, a evidência de código e o mínimo de
   contexto — não o seu raciocínio (ancora o revisor). Ele re-deriva o caminho
   de exploração a partir do código e responde se se sustenta, com evidência
   própria.

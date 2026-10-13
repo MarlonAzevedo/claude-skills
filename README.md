@@ -33,3 +33,25 @@ git clone https://github.com/MarlonAzevedo/claude-skills.git ~/.claude/skills
 
 Se `~/.claude/skills` já existir (por exemplo, com a pasta `synced/` do app), clone em
 outro lugar e mova o `.git` e os arquivos pra dentro dele.
+
+Depois, ligue os subagentes e o hook de captura (`_harness/`):
+
+```bash
+mkdir -p ~/.claude/agents ~/.claude/hooks
+ln -s ~/.claude/skills/_harness/agents/*.md ~/.claude/agents/
+ln -s ~/.claude/skills/_harness/hooks/captura-sessao.py ~/.claude/hooks/
+```
+
+e acrescente ao `~/.claude/settings.json` os hooks `PreCompact` e `SessionEnd`
+com o comando `python3 -I ~/.claude/hooks/captura-sessao.py`. Teste:
+`python3 -I ~/.claude/skills/testes/test_captura_sessao.py`.
+
+## `_harness/`
+
+| Arquivo | Para quê |
+|---|---|
+| `agents/consultor-obsidian.md` | Busca no vault e devolve só caminhos + resumo (Haiku) |
+| `agents/leitor-mssql.md` | Consulta o MSSQL só com leitura |
+| `agents/executor-testes.md` | Roda testes e devolve só placar e falhas (Haiku) |
+| `agents/verificador.md` | Revisor só de leitura que tenta refutar um achado |
+| `hooks/captura-sessao.py` | Grava rascunho da sessão em `<vault>/_inbox` antes de compactar e no fim, sem LLM |
