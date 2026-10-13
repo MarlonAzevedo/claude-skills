@@ -34,6 +34,9 @@ class Candidatos(unittest.TestCase):
             "testes/test_regra.py": "teste\n",
             "scripts/test_solto.py": "teste\n",
             "segredo.env": "X=1\n",
+            "libs/chart/dist/chart.js": "lib\n",
+            "vendor/x/doc/deep-copy.png": "png\n",
+            "src/Video copy.jsx": "copia\n",
         }
         for nome, texto in arquivos.items():
             p = r / nome
@@ -63,12 +66,15 @@ class Candidatos(unittest.TestCase):
         self.assertIn("segredo.env", self.secao("Rastreado mas coberto"))
 
     def test_artefato(self):
-        self.assertIn("dist/bundle.js", self.secao("Artefato"))
+        s = self.secao("Artefato")
+        self.assertIn("dist/bundle.js", s)
+        self.assertNotIn("libs/chart/dist", s)
 
     def test_lixo_por_nome(self):
         s = self.secao("Lixo por nome")
-        for f in ("src/usado.ts.bak", "docs/guia (1).md", "notas.tmp"):
+        for f in ("src/usado.ts.bak", "docs/guia (1).md", "notas.tmp", "src/Video copy.jsx"):
             self.assertIn(f, s)
+        self.assertNotIn("deep-copy.png", s)
 
     def test_nao_rastreado_sem_repetir_lixo(self):
         s = self.secao("Não rastreado")

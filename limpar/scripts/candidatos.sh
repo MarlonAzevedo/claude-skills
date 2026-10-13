@@ -21,14 +21,17 @@ secao() {
   [ "$total" -gt "$LIMITE" ] && printf '… mais %d\n' "$((total - LIMITE))"
 }
 
-LIXO='(\.bak|\.orig|\.rej|\.tmp|\.swp|\.swo|\.old|~|\.DS_Store|Thumbs\.db|desktop\.ini|\.log)$|( \([0-9]+\)| - c[oó]pia| copy|-copy)(\.[^/]*)?$'
+LIXO='(\.bak|\.orig|\.rej|\.tmp|\.swp|\.swo|\.old|~|\.DS_Store|Thumbs\.db|desktop\.ini|\.log)$|( \([0-9]+\)| - c[oó]pia| copy)(\.[^/]*)?$'
 ARTEFATO='(^|/)(node_modules|dist|build|coverage|__pycache__|\.pytest_cache|\.vitest|test-results|playwright-report|\.next|\.nuxt|\.turbo|\.cache|target)/|\.pyc$'
+
+# Código de terceiros copiado no repo: dist/ e build/ ali dentro são da biblioteca
+TERCEIROS='(^|/)(libs?|vendor|third[_-]party|bower_components)/'
 
 echo "# Candidatos em $(git rev-parse --show-toplevel)"
 
 git ls-files -ci --exclude-standard | secao "Rastreado mas coberto pelo .gitignore"
 
-git ls-files | grep -E "$ARTEFATO" | secao "Artefato de build/cache rastreado"
+git ls-files | grep -E "$ARTEFATO" | grep -vE "$TERCEIROS" | secao "Artefato de build/cache rastreado"
 
 { git ls-files; git ls-files -o --exclude-standard; } | grep -E "$LIXO" | sort -u | secao "Lixo por nome (backup, cópia, temporário, log)"
 
