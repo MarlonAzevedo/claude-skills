@@ -14,11 +14,11 @@ aprovado.
 Atualizar: copiar as pastas novas por cima, commitar com o SHA de origem e ver
 o que mudou com `git diff upstream~1 upstream -- <pasta>`.
 
-## Só referência (repositório sem licença, não copiamos o texto)
+## Cópias de akitaonrails/my-skills
 
-[akitaonrails/my-skills](https://github.com/akitaonrails/my-skills), último commit comparado: `5763b9e9e6c84f36874096e256b8fdf6a309d34e`.
+Copiadas de [akitaonrails/my-skills](https://github.com/akitaonrails/my-skills) no commit `5763b9e`, com crédito ao autor. O repositório de origem não declara licença.
 
-| Skill upstream | Nossa skill (texto próprio) |
+| Pasta | Nossa skill (texto próprio) |
 |---|---|
 | `github-resolution` + `iss-audit` | `corrigir` |
 | `pr-post-audit` | `pos-auditoria` |
@@ -27,6 +27,4 @@ o que mudou com `git diff upstream~1 upstream -- <pasta>`.
 | `pr-bump` | `atualizar-deps` |
 | `reflect` | `refletir` |
 
-Atualizar: clonar o repositório fora daqui, `git log 5763b9e9e6c84f36874096e256b8fdf6a309d34e..HEAD -- <skill>`
-para ver o que mudou, reescrever a ideia com palavras nossas na skill da
-`main` e trocar o commit desta tabela.
+Atualizar do mesmo jeito: copiar as pastas novas por cima, commitar com o SHA de origem e comparar com `git diff upstream~1 upstream -- <pasta>`.
