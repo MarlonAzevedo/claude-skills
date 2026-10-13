@@ -71,6 +71,8 @@ intocado e vai para "Ficou de fora".
 
 ## Regra do lote
 
+- **Deduplique antes de começar**: itens com a mesma causa raiz ou a mesma
+  mudança viram **uma** implementação que cita cada um deles.
 - **1 a 3 itens**: loop por item → gate completo uma vez no final → commit(s) → push.
 - **Mais de 3 itens**: igual, mas rode a skill `pos-auditoria` sobre
   `<SHA inicial da rodada>..HEAD` **antes do push**. Achado bloqueante →
@@ -79,6 +81,17 @@ intocado e vai para "Ficou de fora".
 ## Loop por item
 
 ### 1. Triagem
+
+**Checar antes de construir** — nunca implemente a mesma coisa duas vezes:
+
+- Rode o caso relatado na **base atual** (e na branch de integração, se o
+  projeto tiver uma). Quem relata costuma estar versões atrás: caso que já
+  passa é "já corrigido", com o commit que corrigiu; só o resto é trabalho.
+- Procure o mesmo sintoma, área ou mudança em issues e PRs **abertos e
+  fechados** (`gh issue list --state all --search`, `gh pr list --state all
+  --search`), em commits recentes e em branches não mergeadas. Issue aberta
+  duplicada → consolide numa só (link nas duas, feche a outra apontando para
+  ela). PR aberto que já faz o fix → revise e aproveite em vez de escrever outro.
 
 - Separe **fato observado** (status, mensagem de erro, linha do log) do
   **diagnóstico de quem relatou**. Só o fato é evidência.
