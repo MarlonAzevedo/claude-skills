@@ -13,7 +13,7 @@ Este diretório é o próprio repositório: editou uma skill, é só commitar aq
 | `release` | Cortar versão: semver pelo CHANGELOG, tag anotada só com CI verde | adaptada de akitaonrails/my-skills (`release`) |
 | `atualizar-deps` | Consolidar Dependabot/Renovate e desatualizados num commit, com piso de supply chain | adaptada de akitaonrails/my-skills (`pr-bump`) |
 | `refletir` | Kaizen: transformar erros reais em regras e skills | adaptada de akitaonrails/my-skills (`reflect`) |
-| `salvar` | Registrar a sessão: docs do repo + memória de longo prazo (vault Obsidian do projeto se existir, senão [ai-memory](https://github.com/akitaonrails/ai-memory)) | própria |
+| `salvar` | Registrar a sessão: docs do repo + memória de longo prazo (vault Obsidian do projeto, se existir) | própria |
 | `tlc-spec-lean` | Features novas: plan → checks → build → verificador independente | [tech-leads-club/agent-skills](https://github.com/tech-leads-club/agent-skills), CC-BY-4.0 |
 | `harness-eval` | Auditar CLAUDE.md/AGENTS.md e skills (caminhos quebrados, redundância) | tech-leads-club/agent-skills, CC-BY-4.0. `scripts/inventory_extract.py` alterado: pula citações fora do repo |
 | `security-best-practices` | Specs de código seguro por linguagem/framework | tech-leads-club/agent-skills (originalmente openai/skills), Apache-2.0 (`LICENSE.txt`) |
