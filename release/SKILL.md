@@ -146,10 +146,40 @@ git push origin vX.Y.Z
 Nunca apague, mova ou force-push tag publicada. Tag errada se corrige com uma
 patch nova.
 
-## Fase 8 — Verificar e relatar
+## Fase 8 — Verificar
 
 `git ls-remote --tags origin vX.Y.Z` com o SHA certo, release/artefato visível
 (`gh release view`, registry, URL de download), endpoint de versão se houver.
+
+## Fase 9 — Limpar o que sobrou
+
+Adaptada da Phase 7 de [akitaonrails/my-skills](https://github.com/akitaonrails/my-skills)
+(`release`, commit `2ae1eb8`), com autorização do autor.
+
+O release não acabou enquanto o lixo de build e de revisão continua no disco:
+os gates deixam dezenas de GB para trás, e pular esta fase já encheu disco.
+Rode só depois do release verificado (Fase 8), nunca antes.
+
+1. **Artefatos de build.** O alvo de limpeza do próprio projeto, se houver
+   (`make clean`, `cargo clean` em Rust, `dotnet clean`…). Aceite o rebuild
+   completo da próxima execução: essa troca vale uma vez por release.
+2. **Instalações de dependência que vazaram para o checkout.** Auditorias e
+   verificações deixam `node_modules/` (e equivalentes) em pastas que só
+   versionam o lockfile. Ache com `git status --ignored --short | grep '^!!'`:
+   pasta ignorada que não existia antes do lote sai.
+3. **Worktrees temporários.** Remova todo `git worktree` criado para
+   auditoria/gate (`git worktree list`; `git worktree remove --force` +
+   `git worktree prune`) e os diretórios de build separados de cada um.
+4. **Temporários fora do repo.** Apague os arquivos da sessão no scratchpad
+   ou em `/tmp` (logs de gate, corpos de comentário, clones). Só o que for
+   desta sessão; nunca `systemd-private-*` nem temporário de outro projeto.
+5. **Caches compartilhados ficam.** `~/.cargo/registry`, `~/.npm`,
+   `~/.composer/cache` e parecidos servem a todos os projetos: limpar custa
+   um novo download em cada um para um ganho único.
+
+Informe no relatório o que foi liberado (com tamanho, quando souber).
+
+Depois, relate:
 
 ```markdown
 ## Release vX.Y.Z
@@ -161,6 +191,7 @@ patch nova.
 - CI: <jobs verdes em <SHA> | sem CI hospedado, só gate local>
 - Tag: vX.Y.Z em <SHA> — publicada: <URL/artefatos>
 - Deploy: <feito | não pedido | sem processo definido>
+- Limpeza: <o que a Fase 9 liberou: build, node_modules, worktrees, temporários>
 ```
 
 Ofereça rodar a skill `salvar` (usa a do projeto, se existir), para registrar a versão na memória do projeto.
