@@ -131,7 +131,41 @@ anything it finds, then re-run it. Only a clean post-audit unlocks the tag.
 
 Verify the released thing exists: tag visible on the remote, artifacts /
 package version resolvable (registry, release page, download URL), version
-endpoint answering if the project has one. Then report:
+endpoint answering if the project has one.
+
+## Phase 7: Reclaim the leftovers
+
+A release is not done while its build and review debris is still on disk —
+release gates leave tens of GB behind, and skipping this has exhausted disks
+before. Run it only after the release is verified (Phase 6), never before.
+
+1. **Build artifacts.** Rust: `cargo clean` in the project (accept the next
+   run's full rebuild — that trade is correct exactly once per release).
+   Other stacks: the project's own clean target if it has one
+   (`make clean`, `pnpm store prune` is global — skip it).
+2. **Dependency installs that leaked into the checkout.** Audit lanes and
+   verification runs leave `node_modules/` (and equivalents) behind in
+   directories that only commit their lockfiles. Find and remove them:
+   `git status --ignored --short | grep '^!!'` — an ignored directory that
+   was not present before the batch goes (a `node_modules` left in the tree
+   has broken other tooling's folder scans twice: once is a fluke).
+3. **Temporary refs and worktrees.** Remove every `git worktree` created for
+   audits/gates (`git worktree list`; `git worktree remove --force` +
+   `git worktree prune`), their separate `CARGO_TARGET_DIR` side directories
+   (each holds a full dependency build), and the local per-PR branches the
+   batch workflow fetches (`git branch | grep '^  pr-' | xargs git branch -D`
+   — they are fetched refs, not work; a repo accumulated 79 of them before
+   this rule existed).
+4. **Scratch outside the repo.** Delete the batch's temp files under /tmp
+   (comment bodies, gate logs, clone-and-seed dirs). Only files attributable
+   to this session — never `systemd-private-*` or other projects' scratch.
+5. **Shared caches are not part of this.** `~/.cargo/registry`,
+   `~/.npm`, and similar cross-project caches stay — pruning them costs every
+   other project a re-download for a one-time saving.
+
+Report what was reclaimed (sizes where known) in the release report.
+
+Then report:
 
 ```markdown
 ## Release vX.Y.Z
@@ -142,6 +176,7 @@ endpoint answering if the project has one. Then report:
 - CI: <green on <SHA> (jobs) | full local gate, no hosted CI>
 - Tag: <tag> on <SHA> — published: <artifact links / release URL>
 - Verification: <tag on remote, artifact/version checks>
+- Cleanup: <what Phase 7 reclaimed: build dirs, node_modules, pr-* branches, /tmp scratch>
 ```
 
 ## Hard rules

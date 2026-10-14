@@ -16,7 +16,7 @@ o que mudou com `git diff upstream~1 upstream -- <pasta>`.
 
 ## Cópias de akitaonrails/my-skills
 
-Copiadas de [akitaonrails/my-skills](https://github.com/akitaonrails/my-skills) no commit `5763b9e`, com crédito ao autor. O repositório de origem não declara licença, mas o autor (Fabio Akita) autorizou o fork em 2026-10-14; trechos podem ser portados direto para a `main`, com crédito.
+Copiadas de [akitaonrails/my-skills](https://github.com/akitaonrails/my-skills) no commit `5763b9e` (`release` atualizada em `2ae1eb8`), com crédito ao autor. O repositório de origem não declara licença, mas o autor (Fabio Akita) autorizou o fork em 2026-10-14; trechos podem ser portados direto para a `main`, com crédito.
 
 | Pasta | Nossa skill |
 |---|---|
