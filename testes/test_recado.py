@@ -53,6 +53,22 @@ class Registro(Base):
         self.assertEqual(self.ok("onde", "--caminho", str(self.proj["plus"] / "sub")).strip(), "plus-sub")
         self.assertEqual(self.ok("onde", "--caminho", str(self.proj["plus"])).strip(), "plus")
 
+    def test_remover_e_renomear(self):
+        self.ok("remover", "plus")
+        self.assertEqual(self.rodar("onde", "--caminho", str(self.proj["plus"])).returncode, 4)
+        self.assertNotEqual(self.rodar("enviar", "--de", "qrtoken", "--para", "plus", entrada="x").returncode, 0)
+        self.ok("registrar", "one-plus", "--caminho", str(self.proj["plus"]))
+        self.assertEqual(self.ok("onde", "--caminho", str(self.proj["plus"])).strip(), "one-plus")
+
+    def test_remover_recusa_com_pendencia(self):
+        self.enviar()
+        r = self.rodar("remover", "plus")
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("plus", self.ok("projetos"))
+
+    def test_remover_desconhecido(self):
+        self.assertNotEqual(self.rodar("remover", "nada").returncode, 0)
+
     def test_prefixo_de_nome_nao_casa(self):
         irmao = self.proj["plus"].parent / "plus2"
         irmao.mkdir()

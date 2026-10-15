@@ -147,12 +147,26 @@ def c_registrar(a):
         raise Falha(f"pasta não existe: {caminho}")
     reg = projetos()
     reg[a.nome] = str(caminho)
+    salvar_projetos(reg)
+    print(f"{a.nome} -> {caminho}")
+
+
+def salvar_projetos(reg):
     privado(raiz())
     tmp = raiz() / ".projetos.tmp"
     tmp.write_text(json.dumps(reg, indent=1, sort_keys=True) + "\n")
     os.chmod(tmp, 0o600)
     os.rename(tmp, raiz() / "projetos.json")
-    print(f"{a.nome} -> {caminho}")
+
+
+def c_remover(a):
+    pasta = exigir(a.nome)
+    if pendentes(pasta / "pendentes") or pendentes(pasta / "handoffs" / "abertos"):
+        raise Falha(f"{a.nome} tem recado ou handoff pendente; pegue ou cancele antes")
+    reg = projetos()
+    del reg[a.nome]
+    salvar_projetos(reg)
+    print(f"{a.nome} removido do registro")
 
 
 def c_projetos(a):
@@ -284,6 +298,9 @@ def main():
     s.add_argument("nome")
     s.add_argument("--caminho", default=".")
     s.set_defaults(f=c_registrar)
+    s = sub.add_parser("remover", help="tira um projeto do registro (para renomear, remova e registre de novo)")
+    s.add_argument("nome")
+    s.set_defaults(f=c_remover)
     sub.add_parser("projetos", help="lista os projetos registrados").set_defaults(f=c_projetos)
     s = sub.add_parser("onde", help="nome do projeto registrado que contém a pasta")
     s.add_argument("--caminho", default=".")

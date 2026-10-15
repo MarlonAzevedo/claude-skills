@@ -18,7 +18,7 @@ Saída: `0` ok, `2` erro, `3` nada a pegar ou já pego, `4` pasta fora de projet
 
 ## Projeto: sempre pelo nome registrado
 
-Todo comando que muda algo leva o projeto explícito (`--projeto`, `--de`, `--para`). Descubra o nome com `$R onde`. Se sair `4`, pergunte ao usuário o nome e registre: `$R registrar <nome> --caminho <raiz do repo>`. Use o nome do registro (`$R projetos`), mesmo que a pasta tenha outro nome.
+Todo comando que muda algo leva o projeto explícito (`--projeto`, `--de`, `--para`). Descubra o nome com `$R onde`. Se sair `4`, pergunte ao usuário o nome e registre: `$R registrar <nome> --caminho <raiz do repo>`. Use o nome do registro (`$R projetos`), mesmo que a pasta tenha outro nome. Para renomear: `$R remover <nome>` e registre de novo.
 
 ## Enviar
 
