@@ -15,6 +15,7 @@ Este diretório é o próprio repositório: editou uma skill, é só commitar aq
 | `refletir` | Kaizen: transformar erros reais em regras e skills | adaptada de akitaonrails/my-skills (`reflect`) |
 | `limpar` | Achar e remover arquivos desnecessários (lixo, artefato rastreado, duplicado, órfão) com prova de não uso, aprovação e gate; levantamento em `scripts/candidatos.sh` | própria |
 | `salvar` | Registrar a sessão: docs do repo + memória de longo prazo (vault Obsidian do projeto, se existir) | própria |
+| `recado` | Conversa assíncrona entre agentes por arquivos: recado entre projetos (pego uma vez só) e handoff de sessão oferecido por id; `scripts/recado.py` | própria, com o protocolo de mensagens e handoff de [akitaonrails/ai-memory](https://github.com/akitaonrails/ai-memory) |
 | `tlc-spec-lean` | Features novas: plan → checks → build → verificador independente | [tech-leads-club/agent-skills](https://github.com/tech-leads-club/agent-skills), CC-BY-4.0 |
 | `harness-eval` | Auditar CLAUDE.md/AGENTS.md e skills (caminhos quebrados, redundância) | tech-leads-club/agent-skills, CC-BY-4.0. `scripts/inventory_extract.py` alterado: pula citações fora do repo |
 | `security-best-practices` | Specs de código seguro por linguagem/framework | tech-leads-club/agent-skills (originalmente openai/skills), Apache-2.0 (`LICENSE.txt`) |
@@ -44,7 +45,9 @@ ln -s ~/.claude/skills/_harness/hooks/captura-sessao.py ~/.claude/hooks/
 ```
 
 e acrescente ao `~/.claude/settings.json` os hooks `PreCompact` e `SessionEnd`
-com o comando `python3 -I ~/.claude/hooks/captura-sessao.py`. Testes:
+com o comando `python3 -I ~/.claude/hooks/captura-sessao.py`, e o `SessionStart` com
+`python3 -I ~/.claude/skills/recado/scripts/recado.py aviso`. Para os outros agentes
+lerem a `recado`: `for d in ~/.agents/skills ~/.codex/skills ~/.pi/agent/skills; do ln -s ~/.claude/skills/recado "$d/"; done`. Testes:
 `for t in ~/.claude/skills/testes/test_*.py; do python3 -I "$t"; done`.
 
 ## `_harness/`
