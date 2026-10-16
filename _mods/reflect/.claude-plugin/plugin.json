@@ -1,0 +1,6 @@
+{
+  "name": "reflect",
+  "version": "0.2.0",
+  "description": "Quando você reclama de algo, oferece transformar o feedback numa regra salva no CLAUDE.md do projeto ou no global.",
+  "types": "./types/index.d.ts"
+}

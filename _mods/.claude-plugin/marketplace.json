@@ -1,0 +1,63 @@
+{
+  "name": "claude-mods",
+  "owner": {
+    "name": "Marlon"
+  },
+  "plugins": [
+    {
+      "name": "progresso-agentes",
+      "source": "./progresso-agentes",
+      "description": "Barra de progresso das tarefas e painel dos subagentes com modelo e tokens."
+    },
+    {
+      "name": "arvore-arquivos",
+      "source": "./arvore-arquivos",
+      "description": "Árvore de arquivos com o que o Claude está lendo/editando e o estado no git."
+    },
+    {
+      "name": "alerta-cache",
+      "source": "./alerta-cache",
+      "description": "Avisa antes de enviar um prompt com o cache expirado e mostra os tokens que vão ser reprocessados."
+    },
+    {
+      "name": "blast-radius",
+      "source": "./blast-radius",
+      "description": "Segura comandos destrutivos, mostra o impacto e só libera com o clique da pessoa."
+    },
+    {
+      "name": "reflect",
+      "source": "./reflect",
+      "description": "Transforma uma reclamação em regra salva no CLAUDE.md."
+    },
+    {
+      "name": "context-bar",
+      "source": "./context-bar",
+      "description": "Contexto em barra empilhada por categoria acima do prompt (hamzafer/claude-code-mods, MIT)."
+    },
+    {
+      "name": "usage-meter",
+      "source": "./usage-meter",
+      "description": "Uso do plano (5h e 7 dias) e custo da sessão acima do prompt (hamzafer/claude-code-mods, MIT)."
+    },
+    {
+      "name": "replay-theater",
+      "source": "./replay-theater",
+      "description": "/replay passa pelas edições do último turno, um diff por vez (hamzafer/claude-code-mods, MIT)."
+    },
+    {
+      "name": "cache-clock",
+      "source": "./cache-clock",
+      "description": "Linha de cache sob a status line; /cache-clock setup ativa (hamzafer/claude-code-mods, MIT)."
+    },
+    {
+      "name": "guarda-encoding",
+      "source": "./guarda-encoding",
+      "description": "Preserva encoding, BOM, quebra de linha e final de arquivo; Windows-1252 é lido e gravado pela própria guarda."
+    },
+    {
+      "name": "lembrete-doc-one",
+      "source": "./lembrete-doc-one",
+      "description": "Lembra de atualizar a documentacao-one quando a sessão altera código da ONE em htdocs."
+    }
+  ]
+}

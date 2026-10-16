@@ -1,0 +1,20 @@
+{
+  "name": "alerta-cache",
+  "version": "0.2.0",
+  "description": "Avisa antes de enviar um prompt depois que o cache expirou e mostra quantos tokens a conversa vai reprocessar.",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "ttlMinutos": {
+      "type": "number",
+      "title": "Validade do cache (minutos)",
+      "description": "Depois de quantos minutos sem resposta o cache é considerado expirado (5 na API padrão, 60 no cache de 1 hora).",
+      "default": 60
+    },
+    "minimoTokens": {
+      "type": "number",
+      "title": "Tamanho mínimo da conversa (tokens)",
+      "description": "Abaixo disso não avisa: reprocessar uma conversa pequena custa pouco.",
+      "default": 30000
+    }
+  }
+}

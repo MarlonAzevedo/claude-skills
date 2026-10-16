@@ -1,0 +1,14 @@
+{
+  "name": "lembrete-doc-one",
+  "version": "0.1.0",
+  "description": "Quando a sessão altera código de um projeto da ONE (htdocs), lembra no fim do turno de atualizar a documentação-one, com botão para pedir.",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "pastaDocumentacao": {
+      "type": "string",
+      "title": "Pasta da documentação da ONE",
+      "description": "Repositório documentacao-one; a tabela Projetos do README.md dele diz qual pasta documenta cada projeto.",
+      "default": "/home/marlon/Documentos/Obsidian-cell/ONE/documentacao-one"
+    }
+  }
+}

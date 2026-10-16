@@ -1,0 +1,6 @@
+{
+  "name": "arvore-arquivos",
+  "version": "0.1.0",
+  "description": "Painel com a árvore de arquivos do projeto: destaca o que o Claude está lendo/editando agora e o estado no git de cada arquivo.",
+  "types": "./types/index.d.ts"
+}

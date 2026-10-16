@@ -1,0 +1,6 @@
+{
+  "name": "blast-radius",
+  "version": "0.1.0",
+  "description": "Segura comandos destrutivos (rm -rf, git reset --hard, push --force...), mostra o que seria afetado e só libera com o clique da pessoa.",
+  "types": "./types/index.d.ts"
+}

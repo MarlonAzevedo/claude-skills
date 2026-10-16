@@ -50,6 +50,15 @@ com o comando `python3 -I ~/.claude/hooks/captura-sessao.py`, e o `SessionStart`
 lerem a `recado`: `for d in ~/.agents/skills ~/.gemini/config/skills ~/.pi/agent/skills; do ln -s ~/.claude/skills/recado "$d/"; done`. Testes:
 `for t in ~/.claude/skills/testes/test_*.py; do python3 -I "$t"; done`.
 
+Os mods (`_mods/`) entram como marketplace local:
+
+```bash
+claude plugin marketplace add ~/.claude/skills/_mods
+for m in progresso-agentes arvore-arquivos alerta-cache reflect guarda-encoding lembrete-doc-one context-bar usage-meter replay-theater cache-clock; do claude plugin install "$m@claude-mods" --scope user; done
+```
+
+O cache-clock ainda pede `/cache-clock setup` numa sessão. Testes: `for m in ~/.claude/skills/_mods/*/; do claude plugin test "$m"; done`.
+
 ## `_harness/`
 
 | Arquivo | Para quê |
@@ -59,3 +68,26 @@ lerem a `recado`: `for d in ~/.agents/skills ~/.gemini/config/skills ~/.pi/agent
 | `agents/executor-testes.md` | Roda testes e devolve só placar e falhas (Haiku) |
 | `agents/verificador.md` | Revisor só de leitura que tenta refutar um achado |
 | `hooks/captura-sessao.py` | Grava rascunho da sessão em `<vault>/_inbox` antes de compactar e no fim, sem LLM |
+
+## `_mods/`
+
+Mods do Claude Code (plugins de function hooks), num marketplace local chamado `claude-mods`. O
+Claude Code lê direto desta pasta: editou um mod, rode `/reload-plugins` ou abra outra sessão.
+
+| Mod | Para quê | Origem |
+|---|---|---|
+| `progresso-agentes` | Barra de progresso das tarefas acima do prompt e painel `/subagentes` com modelo, passos e tokens | própria |
+| `arvore-arquivos` | Painel `/arvore`: arquivos que o Claude lê/edita agora e o estado de cada um no git | própria |
+| `alerta-cache` | Segura o envio quando o cache expirou numa conversa grande e diz quantos tokens vão ser reprocessados | própria |
+| `reflect` | Reclamação vira regra no `CLAUDE.md`/`AGENTS.md` do projeto ou no global, com um clique | própria |
+| `guarda-encoding` | Mantém encoding, BOM, CRLF/LF e final de arquivo; Windows-1252 (PHP legado) é lido e gravado pela guarda | própria |
+| `lembrete-doc-one` | Código alterado em `htdocs` vira lembrete de atualizar a `documentacao-one` no fim do turno | própria |
+| `context-bar` | Contexto em barra empilhada por categoria acima do prompt | [hamzafer/claude-code-mods](https://github.com/hamzafer/claude-code-mods), MIT, traduzido |
+| `usage-meter` | Uso do plano (5h e 7 dias), reset e custo da sessão | hamzafer/claude-code-mods, MIT, traduzido |
+| `replay-theater` | `/replay` passa pelas edições do último turno, um diff por vez | hamzafer/claude-code-mods, MIT, traduzido |
+| `cache-clock` | Linha do cache do prompt sob a status line (`/cache-clock setup`) | hamzafer/claude-code-mods, MIT, traduzido |
+| `blast-radius` | Segura comandos destrutivos até a pessoa liberar. Fica no repositório, desinstalado | própria |
+
+As faixas acima do prompt seguem o protocolo `hooks/bands.ts` do hamzafer (uma coluna `bands`
+compartilhada), então os mods próprios e os dele empilham juntos e respeitam a ordem de
+`~/.claude/claude-code-mods/bands.json`.

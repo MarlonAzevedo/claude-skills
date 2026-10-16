@@ -1,0 +1,5 @@
+{
+  "name": "guarda-encoding",
+  "version": "0.1.0",
+  "description": "Preserva encoding, BOM, quebra de linha e final de arquivo nas edições. Arquivos Windows-1252 são lidos e gravados pela própria guarda, sem virar UTF-8."
+}

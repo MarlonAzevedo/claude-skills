@@ -1,0 +1,6 @@
+{
+  "name": "progresso-agentes",
+  "version": "0.2.0",
+  "description": "Barra de progresso das tarefas acima do prompt e painel com cada subagente: modelo, andamento e tokens.",
+  "types": "./types/index.d.ts"
+}
