@@ -239,7 +239,7 @@ class Handoff(Base):
         self.assertEqual(self.ok("handoff", "listar", "--projeto", "plus").strip(), "")
 
     def test_projeto_desconhecido(self):
-        r = self.rodar("handoff", "gravar", "--projeto", "nada", "--agente", "codex", entrada="x")
+        r = self.rodar("handoff", "gravar", "--projeto", "nada", "--agente", "pi", entrada="x")
         self.assertNotEqual(r.returncode, 0)
 
 

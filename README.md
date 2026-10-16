@@ -47,7 +47,7 @@ ln -s ~/.claude/skills/_harness/hooks/captura-sessao.py ~/.claude/hooks/
 e acrescente ao `~/.claude/settings.json` os hooks `PreCompact` e `SessionEnd`
 com o comando `python3 -I ~/.claude/hooks/captura-sessao.py`, e o `SessionStart` com
 `python3 -I ~/.claude/skills/recado/scripts/recado.py aviso`. Para os outros agentes
-lerem a `recado`: `for d in ~/.agents/skills ~/.codex/skills ~/.pi/agent/skills; do ln -s ~/.claude/skills/recado "$d/"; done`. Testes:
+lerem a `recado`: `for d in ~/.agents/skills ~/.gemini/config/skills ~/.pi/agent/skills; do ln -s ~/.claude/skills/recado "$d/"; done`. Testes:
 `for t in ~/.claude/skills/testes/test_*.py; do python3 -I "$t"; done`.
 
 ## `_harness/`

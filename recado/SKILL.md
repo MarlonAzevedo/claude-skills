@@ -1,6 +1,6 @@
 ---
 name: recado
-description: Conversa assíncrona entre agentes (Claude, Codex, OpenCode, Gemini, Pi) por arquivos — recado de um projeto para o agente de outro projeto, caixa de entrada, e handoff de sessão para retomar o trabalho em outro agente. Use quando o usuário pedir "manda recado", "pede pro agente do <projeto>", "olha a caixa de entrada", "tem recado?", "grava um handoff", "onde paramos?", ou quando o início da sessão avisar recado ou handoff pendente.
+description: Conversa assíncrona entre agentes (Claude, Antigravity/Gemini, Pi) por arquivos — recado de um projeto para o agente de outro projeto, caixa de entrada, e handoff de sessão para retomar o trabalho em outro agente. Use quando o usuário pedir "manda recado", "pede pro agente do <projeto>", "olha a caixa de entrada", "tem recado?", "grava um handoff", "onde paramos?", ou quando o início da sessão avisar recado ou handoff pendente.
 ---
 
 # Recado — conversa entre agentes
@@ -23,7 +23,7 @@ Todo comando que muda algo leva o projeto explícito (`--projeto`, `--de`, `--pa
 ## Enviar
 
 ```bash
-$R enviar --de <este> --para <destino> --agente <claude|codex|...> --assunto "<uma linha>" <<'EOF'
+$R enviar --de <este> --para <destino> --agente <claude|antigravity|pi> --assunto "<uma linha>" <<'EOF'
 <pedido>
 EOF
 ```
