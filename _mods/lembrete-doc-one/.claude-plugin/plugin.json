@@ -1,7 +1,7 @@
 {
   "name": "lembrete-doc-one",
-  "version": "0.1.0",
-  "description": "Quando a sessão altera código de um projeto da ONE (htdocs), lembra no fim do turno de atualizar a documentação-one, com botão para pedir.",
+  "version": "0.2.0",
+  "description": "Quando a sessão altera código de um projeto da ONE (htdocs), mostra o que falta atualizar na documentação-one na linha de dicas, sem interromper (as notas são escritas no fim da sessão ou quando a pessoa pedir).",
   "types": "./types/index.d.ts",
   "userConfig": {
     "pastaDocumentacao": {

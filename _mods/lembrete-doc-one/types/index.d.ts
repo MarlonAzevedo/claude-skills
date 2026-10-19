@@ -2,6 +2,6 @@ export type Pendente = { projeto: string; pastaDoc: string | null; arquivos: str
 
 declare module 'claude-code' {
   interface PluginState {
-    'lembrete-doc-one': { pendentes: Pendente[]; visivel: boolean }
+    'lembrete-doc-one': { pendentes: Pendente[] }
   }
 }

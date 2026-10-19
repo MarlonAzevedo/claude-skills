@@ -1,15 +1,13 @@
 // Lembrete da documentação da ONE: código alterado em htdocs pede nota atualizada na documentacao-one.
 //   Anota cada arquivo que o Edit/Write muda dentro de htdocs, por projeto (mapa lido da tabela
-//   "Projetos" do README.md da documentação), e no fim do turno mostra uma faixa com o que falta
-//   documentar. Editar a pasta do projeto na documentação tira o projeto da lista.
+//   "Projetos" do README.md da documentação), e mostra o que falta documentar na linha de dicas,
+//   sem interromper. Editar a pasta do projeto na documentação tira o projeto da lista.
 import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register } from 'claude-code'
 
 import type { Pendente } from '../types'
-import { bandsFile, parseOrder, stackBands } from './bands'
 
 const pendentes = atom({ plugin: 'lembrete-doc-one', key: 'pendentes' } as const, [] as Pendente[])
-const visivel = atom({ plugin: 'lembrete-doc-one', key: 'visivel' } as const, false)
 
 export type Mapa = { codigo: string; pastaDoc: string }[]
 
@@ -40,14 +38,6 @@ let mapaCache: Promise<Mapa> | undefined
 const mapaDe = ($: EngineInterface, pastaDoc: string) =>
   (mapaCache ??= $.fs.read(`${pastaDoc}/README.md`).then(lerMapa).catch(() => []))
 
-let ordem: Promise<string[]> | undefined
-const ordemFaixas = ($: EngineInterface) => (ordem ??= lerOrdem($).catch(() => []))
-
-async function lerOrdem($: EngineInterface): Promise<string[]> {
-  const arquivo = bandsFile(await $.env.get('CLAUDE_CONFIG_DIR'), await $.env.get('HOME'))
-  return arquivo && (await $.fs.exists(arquivo)) ? parseOrder(await $.fs.read(arquivo)) : []
-}
-
 export const register: Register = (on, options) => {
   const pastaDoc = String(options.pastaDocumentacao ?? '').replace(/\/+$/, '')
 
@@ -74,48 +64,17 @@ export const register: Register = (on, options) => {
     return ran
   }).catch(($, e, next) => next(e))
 
-  on('turn.complete', async ($, e, next) => {
-    const r = await next(e)
-    if (!e.agentId && (await read($, pendentes)).length > 0) await update($, visivel, () => true)
-    return r
-  })
-
-  on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
+  // Aviso discreto e fixo: a documentação é escrita no fim da sessão ou quando a pessoa pedir.
+  on('ui.render', { component: 'PromptHint' }, async ($, e, next) => {
     const lista = await read($, pendentes)
-    if (e.props.hasSurvey || e.props.isWorking || lista.length === 0 || !(await read($, visivel))) return next(e)
-
-    const { Box, Text, Button } = $.ui.resolve(e)
-    const abaixo = await next(e)
+    if (lista.length === 0) return next(e)
+    const { Box, Text } = $.ui.resolve(e)
     const resumo = lista.map(p => `${p.projeto} (${p.arquivos.length})`).join(', ')
-    const pedido =
-      `Atualize a documentação da ONE em ${pastaDoc} para as mudanças desta sessão em: ` +
-      lista.map(p => `${p.projeto} → ${p.pastaDoc ? `${p.pastaDoc}/` : 'sem pasta na documentação ainda'} (${p.arquivos.join(', ')})`).join('; ') +
-      '. Siga o AGENTS.md de lá: git pull antes de editar, registro de mudanças, links [[...]] válidos e commit no repositório da documentação, sem push.'
-
-    const mine = (
-      <Box>
-        <Text color="suggestion">📘 Documentação da ONE pendente: {resumo} </Text>
-        <Button
-          key="atualizar"
-          variant="primary"
-          label="Atualizar"
-          onPress={async () => {
-            await update($, visivel, () => false)
-            await $.prompt.submit({ text: pedido, asUser: true })
-          }}
-        />
-        <Text> </Text>
-        <Button
-          key="ok"
-          role="dismiss"
-          label="Já está ok"
-          onPress={async () => {
-            await update($, pendentes, () => [])
-            await update($, visivel, () => false)
-          }}
-        />
+    return (
+      <Box flexDirection="row">
+        {await next(e)}
+        <Text dimColor> · 📘 doc ONE pendente: {resumo}</Text>
       </Box>
     )
-    return stackBands(abaixo, 'lembrete-doc-one', mine, 'above', await ordemFaixas($))
   })
 }
