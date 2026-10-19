@@ -68,7 +68,7 @@ formato que o aparelho espera (senão ele reenvia). Padrões a reaproveitar:
    Confira que nenhum ramo anterior captura o caminho.
 3. Tipo na lista de `Listar_Placas_Cortex5` (`[2,3,5,...,51,52].indexOf(parseInt(leitor.tipo))`).
 4. Ramo em `Ler_Status_Portas_Equip(tipo, ip, serial)` com as mesmas portas da base, e o módulo
-   gravando o estado com `Leitor_Seta_Porta` antes do `processa_sensor` (modelos tipo 17 e 29):
+   gravando o estado com `Leitor_Seta_Porta` antes do `processa_sensor` (modelos tipos 17, 29 e 42):
    [portas.md](portas.md).
 
 ## `node/api_equipamentos.js`

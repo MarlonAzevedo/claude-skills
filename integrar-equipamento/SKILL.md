@@ -47,7 +47,8 @@ Nada de chutar rota, campo ou código de erro do aparelho: tudo o que o módulo 
    ```
    Nenhuma saída = livre.
 5. **Portas**: leitores, comandos e sensores iguais na base, no Córtex e no módulo, seguindo os
-   faciais de referência (tipos 17 HikVision e 29 ZKTeco), com a verificação obrigatória:
+   modelos (17 HikVision e 29 ZKTeco para facial, 42 Endpoint Full para vários relés e sensores),
+   com a verificação obrigatória:
    [references/portas.md](references/portas.md).
 6. **Base**: tipo, tela, encoding: [references/base.md](references/base.md).
 7. **Córtex**: módulo, rota de push, despacho, status das portas, imagem, testes:
@@ -98,7 +99,7 @@ Cada uma derrubou o Node ou travou a integração na bancada. Trate como requisi
 
 Base (`wsOnePortaria`):
 - [ ] Item em `lista_equipamentos()` com número livre em todas as branches
-- [ ] Portas em `lista_portas_equip_tipo()` no padrão dos tipos 17/29 (lista explícita só se o nome genérico não servir), iguais às do Córtex
+- [ ] Portas em `lista_portas_equip_tipo()` no padrão dos tipos 17/29/42 (lista explícita só se o nome genérico não servir), iguais às do Córtex
 - [ ] Tipo na lista `leitorfacial` (se facial) e ramo no `MudouTipo()` com só os botões que o módulo atende, usuário/senha padrão de fábrica
 - [ ] Windows-1252 + CRLF preservados (`file`, `git diff` sem linha inteira trocada)
 - [ ] Teste em `testes/<equipamento>_tipo_test.php` passando no container
@@ -108,7 +109,7 @@ Córtex (`cortex`):
 - [ ] `require` + `global.<Modulo>` e rota de push em `api.js` antes do `/log`
 - [ ] `else if (param.tipo == N)` em `api_equipamentos.js` antes do `ping` genérico
 - [ ] Tipo na lista de `Listar_Placas_Cortex5` e ramo em `Ler_Status_Portas_Equip`
-- [ ] Módulo grava o estado (`Leitor_Seta_Porta`) e só avisa `processa_sensor` quando muda (como o 29)
+- [ ] Módulo grava o estado (`Leitor_Seta_Porta`, `Atualiza_Status_Porta`, `MsgClientes`) e só avisa `processa_sensor` quando muda (como o 29 e o 42)
 - [ ] Verificação das portas feita (os 6 passos de `references/portas.md`)
 - [ ] `images/equipN.png` e `ARQUITETURA.md` (árvore de módulos e tabela de tipos)
 - [ ] `testes/<equipamento>.test.js` (`node --test`) passando, com os testes existentes de `testes/` de novo

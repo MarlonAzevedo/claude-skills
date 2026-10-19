@@ -27,7 +27,7 @@ $lista[] = array("52", "Nice - Leitor Facial FR300", "Nice - Leitor Facial FR300
 ```
 
 **`lista_portas_equip_tipo($tipo, $filtro, ...)`**: quantidades no bloco do topo (padrão gerado,
-modelos tipo 17 e 29) e, só se o nome genérico não servir, lista explícita nos blocos `S`/`C`.
+modelos tipos 17, 29 e 42) e, só se o nome genérico não servir, lista explícita nos blocos `S`/`C`.
 Padrão, exemplos e a verificação obrigatória: [portas.md](portas.md).
 
 ## `adm/cad_one_equipamento.html`

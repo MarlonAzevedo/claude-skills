@@ -74,6 +74,60 @@ if (status !== ult_status) {
 ```
 Copie esse trecho: evita evento repetido na base e mantém a tela de status certa.
 
+## Modelo completo de relés e sensores: tipo 42 (Endpoint Full)
+
+Para equipamento com vários relés, sensores e leitores, siga o 42: faixas separadas por centena,
+uma função de estado para relé e outra para sensor, pulso pelo `tempo`.
+
+Base: `$leitores = 2; $porta_leitores = 1; $sensores = 8; $porta_sensores = 201; $comandos = 4;
+$porta_comandos = 101;` → `Leitor 1-2`, `Sensor 201-208`, `Relé 101-104`.
+
+Córtex, `Ler_Status_Portas_Equip` (até os leitores têm estado):
+```js
+else if (tipo == 42) {  // Endpoint Full
+    portas = {
+        leitores: [ [1, global.Leitor_Ler_Porta(ip,1)], [2, global.Leitor_Ler_Porta(ip,2)] ],
+        comandos: [ [101, global.Leitor_Ler_Porta(ip,101)], [102, global.Leitor_Ler_Porta(ip,102)], [103, global.Leitor_Ler_Porta(ip,103)], [104, global.Leitor_Ler_Porta(ip,104)] ],
+        sensores: [ [201, global.Leitor_Ler_Porta(ip,201)], ..., [208, global.Leitor_Ler_Porta(ip,208)] ]
+    }
+}
+```
+
+Módulo (`node/api_endpoint_full.js`):
+
+- **Comando** (`EndpointFullComando`): `pt` 101-104 vira o relé do aparelho (`/relay<pt - 100>/on|off`);
+  com `param.stat == "1"` e `param.tempo > 0`, um `setTimeout` manda o `off` depois do tempo (pulso).
+- **Push de status**: o aparelho manda JSON com a porta como chave
+  (`{"serial":"...","201":"0","101":"1","1":"0"}`); o módulo separa pela faixa: `2xx` sensor
+  (`209`/`210` analógicos), `1xx` relé, um dígito leitor.
+- **Estado do relé** — atualiza banco, tela e cache, sem `processa_sensor`:
+  ```js
+  function EndpointFullSetaStatusRele(param, porta, stat) {
+      var ult_status = global.Leitor_Ler_Porta(param.ip, porta);
+      var status_atual = ""+stat;
+      if (status_atual !== ult_status) {
+          global.Atualiza_Status_Porta(porta, status_atual, param.serial);
+          global.MsgClientes('cmd', [[porta, status_atual, param.serial]]);
+          global.Leitor_Seta_Porta(param.ip, porta, status_atual);
+      }
+  }
+  ```
+- **Estado do sensor** — o mesmo e, no fim, o `processa_sensor` (gera o evento na base):
+  ```js
+  function EndpointFullSetaStatusSensor(param, porta, stat) {
+      var ult_status = global.Leitor_Ler_Porta(param.ip, porta);
+      var status_atual = ""+stat;
+      if (status_atual !== ult_status) {
+          global.Atualiza_Status_Porta(porta, status_atual, param.serial);
+          global.Leitor_Seta_Porta(param.ip, porta, status_atual);
+          MsgClientes('sns', [[porta, status_atual, param.serial]]);
+          global.processa_sensor(param.ip, porta, status_atual, param.serial, new Date().getTime());
+      }
+  }
+  ```
+  `MsgClientes('cmd'|'sns', ...)` atualiza a tela do Córtex na hora; sem ele o estado só aparece
+  ao recarregar.
+
 ## Quando sair do padrão gerado
 
 Use lista explícita nos blocos `S`/`C` só quando o nome genérico ("Sensor 201", "Relé 1") não diz
@@ -82,7 +136,8 @@ o que a porta é, e copie a convenção da família mais próxima:
 - Sensor de porta / botoeira em **310/311**: Control ID (7, 18, 20) e Facial Intelbras (19, `310`
   "Sensor Porta", `311` "Botoeira").
 - Comandos com nome: `Manter Aberto` (Control ID 7/18, catraca 45), sentidos de catraca (12, 45).
-- Sensores em **201+** / **211+** gerados: HikVision (17), ZKTeco (29), Brasvas, Rasp.
+- Sensores em **201+** / **211+** e relés em **101+** gerados: HikVision (17), ZKTeco (29),
+  Endpoint Full (42), Brasvas, Rasp.
 
 Exemplo de lista explícita — tipo 52 (Nice FR300), que seguiu a Intelbras:
 ```php
@@ -100,7 +155,7 @@ Córtex usa.
 
 ## Verificação das portas (obrigatória)
 
-Faça para o tipo novo e compare com os tipos 17 e 29 (ou com o da mesma família):
+Faça para o tipo novo e compare com os tipos 17 e 29 (faciais) e 42 (vários relés e sensores):
 
 1. **Base x Córtex**: a saída de `lista_portas_equip_tipo(N, "LSC")` (porta e tipo) é igual ao
    ramo de `Ler_Status_Portas_Equip` (leitores, comandos, sensores). Teste nos dois repositórios
@@ -116,7 +171,7 @@ Faça para o tipo novo e compare com os tipos 17 e 29 (ou com o da mesma famíli
    Equipamento já cadastrado antes de mudar as portas: salve de novo para o `Gerar_Portas` refazer.
 4. **Tela de comandos da base**: aparecem só os comandos do tipo, com a descrição certa; cada botão
    chega no módulo como `op = "cmd"` com o `pt` esperado (log do Córtex).
-5. **Tela de status do Córtex**: lista leitores, comandos e sensores do tipo, e o estado muda
-   quando o sensor muda (`Leitor_Seta_Porta` no módulo).
+5. **Tela de status do Córtex**: lista leitores, comandos e sensores do tipo, e o estado de relé
+   e sensor muda na hora (`Leitor_Seta_Porta` + `Atualiza_Status_Porta` + `MsgClientes`, como no 42).
 6. **Bancada**: abrir/fechar a porta e apertar a botoeira geram o evento do sensor certo na base;
    o relé abre pelo botão da tela.
