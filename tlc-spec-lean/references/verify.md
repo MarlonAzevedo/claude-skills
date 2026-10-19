@@ -308,14 +308,17 @@ it does not feel that way: a missing substring in a CTA reads as a defect while 
 different composition" reads as feedback. The second is the larger failure and the one that survives
 to production, so it carries a FAIL to the last round rather than softening into a note.
 
-Route gaps back to an implementer as fix work and re-verify, bounded to **three** rounds before
-escalating to the user.
+Route gaps back to an implementer as fix work and re-verify. There is **no round limit**: repeat
+fix -> re-verify for as many rounds as it takes until every check passes. Each round is a **new,
+fresh Verifier** - never the previous round's Verifier carrying its context, and never the author.
+Escalate to the user only when a round makes no progress (the same gap survives a fix) or a gap
+needs a decision outside the plan.
 
 ## Re-verifying after a fix
 
 A later round is scoped by two things: **the fix's diff, and every verdict that was not PASS.**
 Anything else carries forward. Re-running the whole review to reconfirm what a fix could not have
-touched is the cost the three-round bound multiplies by three.
+touched is a cost every extra round multiplies.
 
 Two rules make that safe. **Proofs always re-run in full, at the new `HEAD`** - green is a property
 of a commit, and batched by target that is two invocations. And **everything carried forward says

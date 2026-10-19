@@ -17,7 +17,7 @@ Este diretório é o próprio repositório: editou uma skill, é só commitar aq
 | `limpar` | Achar e remover arquivos desnecessários (lixo, artefato rastreado, duplicado, órfão) com prova de não uso, aprovação e gate; levantamento em `scripts/candidatos.sh` | própria |
 | `salvar` | Registrar a sessão: docs do repo + memória de longo prazo (vault Obsidian do projeto, se existir) | própria |
 | `recado` | Conversa assíncrona entre agentes por arquivos: recado entre projetos (pego uma vez só) e handoff de sessão oferecido por id; `scripts/recado.py` | própria, com o protocolo de mensagens e handoff de [akitaonrails/ai-memory](https://github.com/akitaonrails/ai-memory) |
-| `tlc-spec-lean` | Features novas: plan → checks → build → verificador independente | [tech-leads-club/agent-skills](https://github.com/tech-leads-club/agent-skills), CC-BY-4.0 |
+| `tlc-spec-lean` | Features novas: plan → checks → build → verificador independente | [tech-leads-club/agent-skills](https://github.com/tech-leads-club/agent-skills), CC-BY-4.0. `SKILL.md` e `references/verify.md` alterados: reverificação sem limite de rodadas, sempre com verificador novo |
 | `harness-eval` | Auditar CLAUDE.md/AGENTS.md e skills (caminhos quebrados, redundância) | tech-leads-club/agent-skills, CC-BY-4.0. `scripts/inventory_extract.py` alterado: pula citações fora do repo |
 | `security-best-practices` | Specs de código seguro por linguagem/framework | tech-leads-club/agent-skills (originalmente openai/skills), Apache-2.0 (`LICENSE.txt`) |
 

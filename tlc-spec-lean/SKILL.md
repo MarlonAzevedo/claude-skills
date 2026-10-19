@@ -197,8 +197,9 @@ proof, commit in coherent pieces. No task list, no per-task review tables. Bound
 `Landing` timing, handoff and the scope guardrail: [build.md](references/build.md).
 
 **Verify** - when the last commit of the feature lands, dispatch a fresh Verifier in the
-same turn. Do not ask. Do not wait for "verify work". Procedure, report format and scoped
-re-verification: [verify.md](references/verify.md).
+same turn. Do not ask. Do not wait for "verify work". Gaps go back as fix work and a new fresh
+Verifier re-checks, for as many rounds as it takes until everything passes. Procedure, report
+format and scoped re-verification: [verify.md](references/verify.md).
 
 Durable memory - project decisions, session handoff, and the lessons layer:
 [memory.md](references/memory.md).
