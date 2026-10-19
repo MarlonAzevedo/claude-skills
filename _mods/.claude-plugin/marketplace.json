@@ -57,7 +57,22 @@
     {
       "name": "lembrete-doc-one",
       "source": "./lembrete-doc-one",
-      "description": "Lembra de atualizar a documentacao-one quando a sessão altera código da ONE em htdocs."
+      "description": "Mostra na linha de dicas o que falta atualizar na documentacao-one quando a sessão altera código da ONE em htdocs."
+    },
+    {
+      "name": "after",
+      "source": "./after",
+      "description": "/after <tarefa> roda depois da tarefa atual, sem interromper; fila editável (midudev/better-claude, MIT)."
+    },
+    {
+      "name": "use-haiku",
+      "source": "./use-haiku",
+      "description": "Prompt começando com _ roda aquele turno no Haiku (midudev/better-claude, MIT)."
+    },
+    {
+      "name": "think-hard",
+      "source": "./think-hard",
+      "description": "Prompt começando com + pensa com esforço máximo naquele turno (midudev/better-claude, MIT)."
     }
   ]
 }
