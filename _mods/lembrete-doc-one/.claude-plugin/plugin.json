@@ -1,7 +1,7 @@
 {
   "name": "lembrete-doc-one",
-  "version": "0.2.0",
-  "description": "Quando a sessão altera código de um projeto da ONE (htdocs), mostra o que falta atualizar na documentação-one na linha de dicas, sem interromper (as notas são escritas no fim da sessão ou quando a pessoa pedir).",
+  "version": "0.3.0",
+  "description": "Quando a sessão altera código de um projeto da ONE (htdocs no Windows ou as pastas docker-* no Linux), mostra o que falta atualizar na documentação-one na linha de dicas, sem interromper (as notas são escritas no fim da sessão ou quando a pessoa pedir).",
   "types": "./types/index.d.ts",
   "userConfig": {
     "pastaDocumentacao": {
@@ -9,6 +9,18 @@
       "title": "Pasta da documentação da ONE",
       "description": "Repositório documentacao-one; a tabela Projetos do README.md dele diz qual pasta documenta cada projeto.",
       "default": "/home/marlon/Documentos/Obsidian-cell/ONE/documentacao-one"
+    },
+    "pastasCodigo": {
+      "type": "string",
+      "title": "Pastas de código fora do htdocs",
+      "description": "Pastas que fazem o papel do htdocs (Linux), separadas por vírgula; só conta o projeto que está na tabela Projetos do README.",
+      "default": "/docker-projetos/projetosOne/, /docker-portaria/projetosOne/, /docker-portaria/, /docker-cortex/"
+    },
+    "apelidos": {
+      "type": "string",
+      "title": "Apelidos de pasta",
+      "description": "Pasta local com nome diferente do htdocs, como pasta=caminho-no-htdocs, separados por vírgula.",
+      "default": "onePlus=wsOnePortaria/Plus"
     }
   }
 }

@@ -2,7 +2,7 @@ import { expect, test } from 'claude-code/testing'
 import type { Engine } from 'claude-code/testing'
 import type { On } from 'claude-code'
 
-import { lerMapa, projetoDe } from '../hooks/register'
+import { lerApelidos, lerMapa, lerRaizes, projetoDe } from '../hooks/register'
 
 const DOC = '/doc/documentacao-one'
 const README = `# Documentação
@@ -48,6 +48,19 @@ test('lê o mapa da tabela Projetos e acha o projeto pelo caminho mais longo', (
   expect(projetoDe('/srv/htdocs/portal-front/src/b.tsx', mapa)).toEqual({ projeto: 'portal-front', pastaDoc: 'portal' })
   expect(projetoDe('/srv/htdocs/sistema/adm/c.php', mapa)).toEqual({ projeto: 'sistema', pastaDoc: null })
   expect(projetoDe('/home/eu/outro/d.ts', mapa)).toBeNull()
+})
+
+test('no Linux acha o projeto pelas pastas docker-*, com apelido para o Plus', () => {
+  const mapa = lerMapa(README.replace('\n## Sprints', '| **Plus** | [`plus/`](p.md) | `htdocs/sistema/Plus` | [[p]] |\n\n## Sprints'))
+  const raizes = lerRaizes('/docker-projetos/projetosOne/, /docker-portaria/projetosOne/, /docker-portaria/, /docker-cortex/')
+  const apelidos = lerApelidos('onePlus=sistema/Plus')
+  const opc = { raizes, apelidos }
+  expect(projetoDe('/home/eu/docker-projetos/projetosOne/portal-front/src/b.tsx', mapa, opc)).toEqual({ projeto: 'portal-front', pastaDoc: 'portal' })
+  expect(projetoDe('/home/eu/docker-portaria/sistema/API/src/a.js', mapa, opc)).toEqual({ projeto: 'Api', pastaDoc: 'api' })
+  expect(projetoDe('/home/eu/docker-portaria/projetosOne/onePlus/src/c.js', mapa, opc)).toEqual({ projeto: 'Plus', pastaDoc: 'plus' })
+  // Fora do htdocs, pasta que não está na tabela não é projeto (compose, scripts do ambiente)
+  expect(projetoDe('/home/eu/docker-cortex/docker/Dockerfile', mapa, opc)).toBeNull()
+  expect(projetoDe('/home/eu/docker-portaria/subir.sh', mapa, opc)).toBeNull()
 })
 
 test('código alterado em htdocs aparece discreto na linha de dicas, sem faixa nem botão', OPCOES, async ($, on) => {

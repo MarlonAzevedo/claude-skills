@@ -82,7 +82,7 @@ Claude Code lê direto desta pasta: editou um mod, rode `/reload-plugins` ou abr
 | `alerta-cache` | Segura o envio quando o cache expirou numa conversa grande e diz quantos tokens vão ser reprocessados | própria |
 | `reflect` | Reclamação vira regra no `CLAUDE.md`/`AGENTS.md` do projeto ou no global, com um clique | própria |
 | `guarda-encoding` | Mantém encoding, BOM, CRLF/LF e final de arquivo; Windows-1252 (PHP legado) é lido e gravado pela guarda | própria |
-| `lembrete-doc-one` | Código alterado em `htdocs` aparece na linha de dicas como documentação pendente, sem interromper (as notas são escritas no fim da sessão ou quando pedir) | própria |
+| `lembrete-doc-one` | Código alterado em `htdocs` (no Linux, nas pastas `docker-*`, opção `pastasCodigo`) aparece na linha de dicas como documentação pendente, sem interromper (as notas são escritas no fim da sessão ou quando pedir) | própria |
 | `context-bar` | Contexto em barra empilhada por categoria acima do prompt | [hamzafer/claude-code-mods](https://github.com/hamzafer/claude-code-mods), MIT, traduzido |
 | `usage-meter` | Uso do plano (5h e 7 dias), reset e custo da sessão | hamzafer/claude-code-mods, MIT, traduzido |
 | `replay-theater` | `/replay` passa pelas edições do último turno, um diff por vez | hamzafer/claude-code-mods, MIT, traduzido |

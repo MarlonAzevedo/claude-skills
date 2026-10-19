@@ -24,14 +24,34 @@ export const lerMapa = (readme: string): Mapa => {
   return mapa.sort((a, b) => b.codigo.length - a.codigo.length)
 }
 
-// Projeto de um arquivo em htdocs: o código mais longo do mapa que o contém, senão a primeira pasta.
-export const projetoDe = (caminho: string, mapa: Mapa): { projeto: string; pastaDoc: string | null } | null => {
+// Pastas que fazem o papel do htdocs fora do Windows, a mais longa primeiro: "/a/, /b/"
+export const lerRaizes = (texto: string): string[] =>
+  texto.split(',').map(r => r.trim()).filter(Boolean).map(r => `/${r.replace(/^\/+|\/+$/g, '')}/`).sort((a, b) => b.length - a.length)
+
+// Pasta local com nome diferente do htdocs: "onePlus=wsOnePortaria/Plus"
+export const lerApelidos = (texto: string): Record<string, string> =>
+  Object.fromEntries(texto.split(',').map(a => a.split('=').map(s => s.trim())).filter(a => a.length === 2 && a[0] && a[1]))
+
+type Locais = { raizes: string[]; apelidos: Record<string, string> }
+
+// Projeto de um arquivo: o código mais longo do mapa que o contém. Em htdocs, sem achado, vale a
+// primeira pasta; nas outras raízes, só conta o que está na tabela (o resto é do ambiente docker).
+export const projetoDe = (caminho: string, mapa: Mapa, locais: Locais = { raizes: [], apelidos: {} }): { projeto: string; pastaDoc: string | null } | null => {
+  let rel: string | undefined
+  let emHtdocs = false
   const m = caminho.match(/\/htdocs\/(.+)$/)
-  if (!m) return null
-  const rel = m[1]!
-  const achado = mapa.find(p => rel.toLowerCase().startsWith(`${p.codigo.toLowerCase()}/`))
+  if (m) [rel, emHtdocs] = [m[1]!, true]
+  else {
+    const raiz = locais.raizes.find(r => caminho.includes(r))
+    if (raiz) rel = caminho.slice(caminho.indexOf(raiz) + raiz.length)
+  }
+  if (!rel || !rel.includes('/')) return null
+  const [primeira, ...resto] = rel.split('/')
+  const apelido = Object.entries(locais.apelidos).find(([de]) => de.toLowerCase() === primeira!.toLowerCase())?.[1]
+  if (apelido) rel = [apelido, ...resto].join('/')
+  const achado = mapa.find(p => rel!.toLowerCase().startsWith(`${p.codigo.toLowerCase()}/`))
   if (achado) return { projeto: achado.codigo.split('/').pop()!, pastaDoc: achado.pastaDoc }
-  return { projeto: rel.split('/')[0]!, pastaDoc: null }
+  return emHtdocs ? { projeto: primeira!, pastaDoc: null } : null
 }
 
 let mapaCache: Promise<Mapa> | undefined
@@ -40,6 +60,7 @@ const mapaDe = ($: EngineInterface, pastaDoc: string) =>
 
 export const register: Register = (on, options) => {
   const pastaDoc = String(options.pastaDocumentacao ?? '').replace(/\/+$/, '')
+  const locais = { raizes: lerRaizes(String(options.pastasCodigo ?? '')), apelidos: lerApelidos(String(options.apelidos ?? '')) }
 
   on('tool.call', async ($, e, next) => {
     const ran = await next(e)
@@ -54,7 +75,7 @@ export const register: Register = (on, options) => {
       return ran
     }
 
-    const alvo = projetoDe(caminho, await mapaDe($, pastaDoc))
+    const alvo = projetoDe(caminho, await mapaDe($, pastaDoc), locais)
     if (!alvo) return ran
     await update($, pendentes, l => {
       const atual = l.find(p => p.projeto === alvo.projeto)
