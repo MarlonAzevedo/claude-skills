@@ -125,8 +125,22 @@ Módulo (`node/api_endpoint_full.js`):
       }
   }
   ```
-  `MsgClientes('cmd'|'sns', ...)` atualiza a tela do Córtex na hora; sem ele o estado só aparece
-  ao recarregar.
+  `MsgClientes('cmd'|'sns', ...)` atualiza a tela do Córtex na hora.
+- **Atenção — não copie a duplicação do sensor**: o `processa_sensor` (`node/api.js`) já chama
+  `Atualiza_Status_Porta` e `MsgClientes('sns', ...)`. No sensor, o 42 faz os dois de novo antes
+  (grava `one_status` e avisa a tela duas vezes). Equipamento novo usa a estrutura do 42 sem isso:
+  ```js
+  // Estrutura do Endpoint Full: grava o estado e só avisa quando muda.
+  // O processa_sensor já grava one_status (Atualiza_Status_Porta) e avisa a tela (MsgClientes)
+  function SetaStatusSensor(equip, ip_cliente, porta, status) {
+      if (global.Leitor_Ler_Porta(ip_cliente, porta) !== status) {
+          global.Leitor_Seta_Porta(ip_cliente, porta, status);
+          global.processa_sensor(ip_cliente, porta, status, equip.serial, Date.now());
+      }
+  }
+  ```
+  (é a do Nice FR300, tipo 52). No relé, que não passa pelo `processa_sensor`, as três chamadas
+  do 42 continuam necessárias.
 
 ## Quando sair do padrão gerado
 
@@ -139,19 +153,20 @@ o que a porta é, e copie a convenção da família mais próxima:
 - Sensores em **201+** / **211+** e relés em **101+** gerados: HikVision (17), ZKTeco (29),
   Endpoint Full (42), Brasvas, Rasp.
 
-Exemplo de lista explícita — tipo 52 (Nice FR300), que seguiu a Intelbras:
+Exemplo de lista explícita — Facial Intelbras (19):
 ```php
-if ( $tipo == 52 ) { // Nice - Leitor Facial FR300 (eventos DoorStatus e OverTimeAlarmOn)
+if ( $tipo == 19 ) { // Facial Intelbras
 	$lista[] = array("porta"=>310, "tipo"=>"S", "descricao"=>"Sensor Porta", "numero"=>1);
-	$lista[] = array("porta"=>311, "tipo"=>"S", "descricao"=>"Alarme Porta Aberta", "numero"=>2);
+	$lista[] = array("porta"=>311, "tipo"=>"S", "descricao"=>"Botoeira", "numero"=>2);
 }
-...
-if ( $tipo == 52 ) { // Nice - Leitor Facial FR300
-	$lista[] = array("porta"=>1, "tipo"=>"C", "descricao"=>"Abrir Porta", "numero"=>1);
 ```
-O bloco de quantidades continua existindo (leitores 1, sensores 0, comandos 1): ele define os
-leitores e serve de fallback. `numero` é a ordem dentro do tipo (1, 2, …), `porta` é o número que o
-Córtex usa.
+O bloco de quantidades continua existindo mesmo com lista própria: ele define os leitores e serve
+de fallback. `numero` é a ordem dentro do tipo (1, 2, …), `porta` é o número que o Córtex usa.
+
+Exemplo de equipamento novo no padrão gerado — Nice FR300 (52): começou com 310/311 em lista própria
+e foi trocado para o padrão do 42 (`$sensores = 2; $porta_sensores = 201;`, sensor 201 = estado da
+porta, 202 = porta aberta além do tempo); só o comando tem nome próprio (`1` "Abrir Porta"). Se
+mudar as portas de um tipo já cadastrado, regrave os equipamentos para o `Gerar_Portas` refazer.
 
 ## Verificação das portas (obrigatória)
 
