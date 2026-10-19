@@ -13,6 +13,7 @@ Este diretório é o próprio repositório: editou uma skill, é só commitar aq
 | `release` | Cortar versão: semver pelo CHANGELOG, tag anotada só com CI verde | adaptada de akitaonrails/my-skills (`release`) |
 | `atualizar-deps` | Consolidar Dependabot/Renovate e desatualizados num commit, com piso de supply chain | adaptada de akitaonrails/my-skills (`pr-bump`) |
 | `refletir` | Kaizen: transformar erros reais em regras e skills | adaptada de akitaonrails/my-skills (`reflect`) |
+| `commit` | Commits semânticos em português por grupo lógico, conferindo encoding e segredos; push só se escolher. Roda no Haiku | adaptada de [midudev/better-claude](https://github.com/midudev/better-claude) (`/commit`), MIT |
 | `limpar` | Achar e remover arquivos desnecessários (lixo, artefato rastreado, duplicado, órfão) com prova de não uso, aprovação e gate; levantamento em `scripts/candidatos.sh` | própria |
 | `salvar` | Registrar a sessão: docs do repo + memória de longo prazo (vault Obsidian do projeto, se existir) | própria |
 | `recado` | Conversa assíncrona entre agentes por arquivos: recado entre projetos (pego uma vez só) e handoff de sessão oferecido por id; `scripts/recado.py` | própria, com o protocolo de mensagens e handoff de [akitaonrails/ai-memory](https://github.com/akitaonrails/ai-memory) |
@@ -54,10 +55,10 @@ Os mods (`_mods/`) entram como marketplace local:
 
 ```bash
 claude plugin marketplace add ~/.claude/skills/_mods
-for m in progresso-agentes arvore-arquivos alerta-cache reflect guarda-encoding lembrete-doc-one context-bar usage-meter replay-theater cache-clock; do claude plugin install "$m@claude-mods" --scope user; done
+for m in progresso-agentes arvore-arquivos alerta-cache reflect guarda-encoding lembrete-doc-one context-bar usage-meter replay-theater cache-clock use-haiku think-hard; do claude plugin install "$m@claude-mods" --scope user; done
 ```
 
-O cache-clock ainda pede `/cache-clock setup` numa sessão. Testes: `for m in ~/.claude/skills/_mods/*/; do claude plugin test "$m"; done`.
+O cache-clock ainda pede `/cache-clock setup` numa sessão. O after pede as opções na instalação: `claude plugin install after@claude-mods --scope user --config smart=true --config model=haiku --config display=band`. Testes: `for m in ~/.claude/skills/_mods/*/; do claude plugin test "$m"; done`.
 
 ## `_harness/`
 
@@ -81,11 +82,14 @@ Claude Code lê direto desta pasta: editou um mod, rode `/reload-plugins` ou abr
 | `alerta-cache` | Segura o envio quando o cache expirou numa conversa grande e diz quantos tokens vão ser reprocessados | própria |
 | `reflect` | Reclamação vira regra no `CLAUDE.md`/`AGENTS.md` do projeto ou no global, com um clique | própria |
 | `guarda-encoding` | Mantém encoding, BOM, CRLF/LF e final de arquivo; Windows-1252 (PHP legado) é lido e gravado pela guarda | própria |
-| `lembrete-doc-one` | Código alterado em `htdocs` vira lembrete de atualizar a `documentacao-one` no fim do turno | própria |
+| `lembrete-doc-one` | Código alterado em `htdocs` aparece na linha de dicas como documentação pendente, sem interromper (as notas são escritas no fim da sessão ou quando pedir) | própria |
 | `context-bar` | Contexto em barra empilhada por categoria acima do prompt | [hamzafer/claude-code-mods](https://github.com/hamzafer/claude-code-mods), MIT, traduzido |
 | `usage-meter` | Uso do plano (5h e 7 dias), reset e custo da sessão | hamzafer/claude-code-mods, MIT, traduzido |
 | `replay-theater` | `/replay` passa pelas edições do último turno, um diff por vez | hamzafer/claude-code-mods, MIT, traduzido |
 | `cache-clock` | Linha do cache do prompt sob a status line (`/cache-clock setup`) | hamzafer/claude-code-mods, MIT, traduzido |
+| `after` | Fila de prompts: `/after <tarefa>` roda depois da tarefa atual, sem interromper; `/after` mostra e edita a fila | [midudev/better-claude](https://github.com/midudev/better-claude), MIT |
+| `use-haiku` | Prompt começando com `_` roda aquele turno no Haiku | midudev/better-claude, MIT |
+| `think-hard` | Prompt começando com `+` pensa com esforço máximo naquele turno | midudev/better-claude, MIT |
 | `blast-radius` | Segura comandos destrutivos até a pessoa liberar. Fica no repositório, desinstalado | própria |
 
 As faixas acima do prompt seguem o protocolo `hooks/bands.ts` do hamzafer (uma coluna `bands`
