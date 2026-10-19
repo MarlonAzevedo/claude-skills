@@ -311,8 +311,6 @@ to production, so it carries a FAIL to the last round rather than softening into
 Route gaps back to an implementer as fix work and re-verify. There is **no round limit**: repeat
 fix -> re-verify for as many rounds as it takes until every check passes. Each round is a **new,
 fresh Verifier** - never the previous round's Verifier carrying its context, and never the author.
-Escalate to the user only when a round makes no progress (the same gap survives a fix) or a gap
-needs a decision outside the plan.
 
 ## Re-verifying after a fix
 
