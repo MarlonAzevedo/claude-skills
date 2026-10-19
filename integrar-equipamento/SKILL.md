@@ -22,8 +22,8 @@ Nada de chutar rota, campo ou código de erro do aparelho: tudo o que o módulo 
    `documentacao/equipamentos/equipamentos-00-indice.md`, `equipamentos-nice-fr300.md` (exemplo),
    `cortex/cortex-00-indice.md` e `sistemas-vizinhos.md`. Confira contra o código: se a nota
    divergir do código, vale o código e a nota entra na lista do que corrigir no fim.
-3. Código (no Linux): `~/Documentos/portaria/docker-cortex/cortex` e
-   `~/Documentos/portaria/docker-portaria/wsOnePortaria` (no Windows, em `htdocs`). Containers
+3. Código: `~/Documentos/portaria/docker-cortex/cortex` e
+   `~/Documentos/portaria/docker-portaria/wsOnePortaria`. Containers
    de teste: `docker-cortex/subir.sh` e `docker-portaria/subir.sh`.
 
 ## Fluxo
@@ -46,17 +46,20 @@ Nada de chutar rota, campo ou código de erro do aparelho: tudo o que o módulo 
    cd cortex && git fetch --all -q && for b in $(git branch -a --format='%(refname:short)'); do git grep -qE "tipo ?== ?$N\b" "$b" -- node && echo "$b"; done
    ```
    Nenhuma saída = livre.
-5. **Base**: tipo, portas, tela, encoding: [references/base.md](references/base.md).
-6. **Córtex**: módulo, rota de push, despacho, status das portas, imagem, testes:
+5. **Portas**: leitores, comandos e sensores iguais na base, no Córtex e no módulo, seguindo os
+   faciais de referência (tipos 17 HikVision e 29 ZKTeco), com a verificação obrigatória:
+   [references/portas.md](references/portas.md).
+6. **Base**: tipo, tela, encoding: [references/base.md](references/base.md).
+7. **Córtex**: módulo, rota de push, despacho, status das portas, imagem, testes:
    [references/cortex.md](references/cortex.md).
-7. **Testes de regressão** em `testes/` de cada repositório (permanentes, versionados), escritos
+8. **Testes de regressão** em `testes/` de cada repositório (permanentes, versionados), escritos
    a partir dos checks; todo bug achado na bancada ganha teste que falha antes do fix.
-8. **Bancada**: Córtex do Docker cadastrado na conta como **1º IP do `ws_modulo`**, aparelho
+9. **Bancada**: Córtex do Docker cadastrado na conta como **1º IP do `ws_modulo`**, aparelho
    apontando para o IP público do Córtex. Conferir de verdade: versão, ping, ativar, sincronizar
    faces, reconhecimento liberado e negado, relé, sensores, reinício do aparelho.
-9. **Verificação independente** da `tlc-spec-lean` (verificador novo a cada rodada, nunca o
+10. **Verificação independente** da `tlc-spec-lean` (verificador novo a cada rodada, nunca o
    autor), quantas rodadas forem precisas.
-10. **Documentação** na `documentacao-one` no fim (ver Entrega). Commit local nos dois
+11. **Documentação** na `documentacao-one` no fim (ver Entrega). Commit local nos dois
     repositórios; push e PR só quando o usuário pedir.
 
 ## Armadilhas reais (FR300)
@@ -95,7 +98,7 @@ Cada uma derrubou o Node ou travou a integração na bancada. Trate como requisi
 
 Base (`wsOnePortaria`):
 - [ ] Item em `lista_equipamentos()` com número livre em todas as branches
-- [ ] Portas em `lista_portas_equip_tipo()` (leitores, sensores, comandos, com descrição) iguais às do Córtex
+- [ ] Portas em `lista_portas_equip_tipo()` no padrão dos tipos 17/29 (lista explícita só se o nome genérico não servir), iguais às do Córtex
 - [ ] Tipo na lista `leitorfacial` (se facial) e ramo no `MudouTipo()` com só os botões que o módulo atende, usuário/senha padrão de fábrica
 - [ ] Windows-1252 + CRLF preservados (`file`, `git diff` sem linha inteira trocada)
 - [ ] Teste em `testes/<equipamento>_tipo_test.php` passando no container
@@ -105,11 +108,13 @@ Córtex (`cortex`):
 - [ ] `require` + `global.<Modulo>` e rota de push em `api.js` antes do `/log`
 - [ ] `else if (param.tipo == N)` em `api_equipamentos.js` antes do `ping` genérico
 - [ ] Tipo na lista de `Listar_Placas_Cortex5` e ramo em `Ler_Status_Portas_Equip`
+- [ ] Módulo grava o estado (`Leitor_Seta_Porta`) e só avisa `processa_sensor` quando muda (como o 29)
+- [ ] Verificação das portas feita (os 6 passos de `references/portas.md`)
 - [ ] `images/equipN.png` e `ARQUITETURA.md` (árvore de módulos e tabela de tipos)
 - [ ] `testes/<equipamento>.test.js` (`node --test`) passando, com os testes existentes de `testes/` de novo
 
 Fechamento:
-- [ ] Bancada conferida (lista do passo 8), pendências não testadas escritas como pendências
+- [ ] Bancada conferida (lista do passo 9), pendências não testadas escritas como pendências
 - [ ] Verificação independente PASS
 - [ ] `documentacao-one` (com `git pull` imediatamente antes de editar): nota do equipamento em
       `documentacao/equipamentos/equipamentos-<fabricante>-<modelo>.md` (fontes, rotas usadas,

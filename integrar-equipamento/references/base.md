@@ -26,32 +26,9 @@ lista. FR300:
 $lista[] = array("52", "Nice - Leitor Facial FR300", "Nice - Leitor Facial FR300");
 ```
 
-**`lista_portas_equip_tipo($tipo, $filtro, ...)`**: as portas devolvidas na ordem L, S, C
-(`$filtro` com as letras pedidas). Dois mecanismos:
-
-1. Quantidade e porta inicial no bloco de `elseif` do topo — geram "Leitor 1", "Leitor 2"… com
-   o laço genérico:
-   ```php
-   } elseif ( $tipo == 52 ) {	// Nice - Leitor Facial FR300
-   	$leitores = 1;	$porta_leitores = 1;
-   	$sensores = 0;	$porta_sensores = 0;
-   	$comandos = 1;	$porta_comandos = 1;
-   ```
-2. Lista explícita, com descrição, dentro dos blocos `if ( strpos($filtro,'S') ...)` e
-   `if ( strpos($filtro,'C') ...)`, no começo da cadeia de `if` (para nenhum ramo genérico
-   capturar o tipo antes):
-   ```php
-   if ( $tipo == 52 ) { // sensores
-   	$lista[] = array("porta"=>310, "tipo"=>"S", "descricao"=>"Sensor Porta", "numero"=>1);
-   	$lista[] = array("porta"=>311, "tipo"=>"S", "descricao"=>"Alarme Porta Aberta", "numero"=>2);
-   }
-   if ( $tipo == 52 ) { // comandos
-   	$lista[] = array("porta"=>1, "tipo"=>"C", "descricao"=>"Abrir Porta", "numero"=>1);
-   }
-   ```
-
-Os números de porta têm de ser **os mesmos** do `Ler_Status_Portas_Equip` do Córtex e dos que o
-módulo manda para `processa_sensor` / recebe em `op = "cmd"` (`param.pt`).
+**`lista_portas_equip_tipo($tipo, $filtro, ...)`**: quantidades no bloco do topo (padrão gerado,
+modelos tipo 17 e 29) e, só se o nome genérico não servir, lista explícita nos blocos `S`/`C`.
+Padrão, exemplos e a verificação obrigatória: [portas.md](portas.md).
 
 ## `adm/cad_one_equipamento.html`
 

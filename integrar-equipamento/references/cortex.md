@@ -67,16 +67,9 @@ formato que o aparelho espera (senão ele reenvia). Padrões a reaproveitar:
    ```
    Confira que nenhum ramo anterior captura o caminho.
 3. Tipo na lista de `Listar_Placas_Cortex5` (`[2,3,5,...,51,52].indexOf(parseInt(leitor.tipo))`).
-4. Ramo em `Ler_Status_Portas_Equip(tipo, ip, serial)` com as mesmas portas da base:
-   ```js
-   else if (tipo == 52) { // Nice FR300 - leitor facial
-       portas = {
-           leitores: [ [1, 1] ],
-           comandos: [ [1, global.Leitor_Ler_Porta(ip,1)] ],
-           sensores: [ [310, global.Leitor_Ler_Porta(ip,310)], [311, global.Leitor_Ler_Porta(ip,311)] ]
-       }
-   }
-   ```
+4. Ramo em `Ler_Status_Portas_Equip(tipo, ip, serial)` com as mesmas portas da base, e o módulo
+   gravando o estado com `Leitor_Seta_Porta` antes do `processa_sensor` (modelos tipo 17 e 29):
+   [portas.md](portas.md).
 
 ## `node/api_equipamentos.js`
 
