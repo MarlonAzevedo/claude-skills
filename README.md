@@ -51,10 +51,11 @@ com o comando `python3 -I ~/.claude/hooks/captura-sessao.py`, e o `SessionStart`
 lerem a `recado`: `for d in ~/.agents/skills ~/.gemini/config/skills ~/.pi/agent/skills; do ln -s ~/.claude/skills/recado "$d/"; done`. Testes:
 `for t in ~/.claude/skills/testes/test_*.py; do python3 -I "$t"; done`.
 
-Os mods (`_mods/`) entram como marketplace local:
+Os mods (`_mods/`) formam o marketplace `claude-mods`, descrito em `.claude-plugin/marketplace.json` na raiz. Nesta máquina (onde os mods são editados), registre pela pasta; em outra máquina, sem clonar, registre pelo GitHub (as mudanças chegam depois do push, com `claude plugin marketplace update claude-mods`):
 
 ```bash
-claude plugin marketplace add ~/.claude/skills/_mods
+claude plugin marketplace add ~/.claude/skills          # pela pasta
+# claude plugin marketplace add MarlonAzevedo/claude-skills   # pelo GitHub
 for m in progresso-agentes arvore-arquivos alerta-cache reflect guarda-encoding lembrete-doc-one context-bar usage-meter replay-theater cache-clock use-haiku think-hard; do claude plugin install "$m@claude-mods" --scope user; done
 ```
 
@@ -72,8 +73,8 @@ O cache-clock ainda pede `/cache-clock setup` numa sessão. O after pede as opç
 
 ## `_mods/`
 
-Mods do Claude Code (plugins de function hooks), num marketplace local chamado `claude-mods`. O
-Claude Code lê direto desta pasta: editou um mod, rode `/reload-plugins` ou abra outra sessão.
+Mods do Claude Code (plugins de function hooks), no marketplace `claude-mods` (`.claude-plugin/marketplace.json` na raiz). Registrado pela pasta, o
+Claude Code lê direto daqui: editou um mod, rode `/reload-plugins` ou abra outra sessão.
 
 | Mod | Para quê | Origem |
 |---|---|---|
