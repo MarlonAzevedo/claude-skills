@@ -71,5 +71,5 @@ Objetivo: saber, com fonte, cada rota e cada campo que o módulo vai usar. O res
 - Relés, entradas (botoeira, sensor de porta, tamper, incêndio) e saídas de alarme, pela página
   de IO do aparelho ou pelo manual. Decida com o usuário o que vira comando e sensor na ONE.
 - FR300: F1 fechadura → comando `1` "Abrir Porta" (`RemoteOpened`, pulso); estado da porta →
-  sensor `310`; porta aberta além do tempo → sensor `311`; botoeira aciona no próprio aparelho e
+  sensor `201`; porta aberta além do tempo → sensor `202`; botoeira aciona no próprio aparelho e
   não vira sensor.
