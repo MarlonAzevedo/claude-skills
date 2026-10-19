@@ -19,8 +19,8 @@ function world (on: On) {
   return { prompts, efforts }
 }
 
-const step = async ($: Engine, effort?: 'low' | 'high') => {
-  for await (const _ of $.turn.step({ turnId: 't1', index: 0, model: 'claude-sonnet-5-5', effort, messageCount: 1 })) void _
+const step = async ($: Engine, effort?: 'low' | 'high', agentId?: string) => {
+  for await (const _ of $.turn.step({ turnId: 't1', index: 0, model: 'claude-sonnet-5-5', effort, messageCount: 1, agentId })) void _
 }
 
 test('a prompt that starts with + is sent without the mark and thinks at max effort', async ($, on) => {
@@ -43,4 +43,12 @@ test('a model without an effort setting is left alone', async ($, on) => {
   await $.prompt.submit({ text: '+plan the refactor' })
   await step($)
   expect(w.efforts).toEqual([undefined])
+})
+
+test('a subagent of a + turn keeps the effort it was configured with', async ($, on) => {
+  const w = world(on)
+  await $.prompt.submit({ text: '+plan the refactor' })
+  await step($, 'low')
+  await step($, 'low', 'a1')
+  expect(w.efforts).toEqual(['max', 'low'])
 })

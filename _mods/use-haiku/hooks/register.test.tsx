@@ -118,17 +118,17 @@ test('the next turn goes back to the session model once a Haiku turn ends', asyn
   expect(w.models.main).toEqual([SESSION])
 })
 
-test('a subagent the Haiku turn starts runs on Haiku, and its end does not end the turn', async ($, on) => {
+test('a subagent the Haiku turn starts keeps its own model, and its end does not end the turn', async ($, on) => {
   const w = world(on)
   await submit($, '_find the bug')
   await $.turn.start({ turnId: 't1', text: 'find the bug' })
   await step($, 't1', 0)
   const spawned = await spawn($, 'a1')
   await step($, 'a1-run', 0, 'a1')
-  await complete($, 'a1-run', HAIKU, 'a1')
+  await complete($, 'a1-run', SESSION, 'a1')
   await step($, 't1', 1)
-  expect(spawned.model).toBe(HAIKU)
-  expect(w.models.a1).toEqual([HAIKU])
+  expect(spawned.model).toBe(SESSION)
+  expect(w.models.a1).toEqual([SESSION])
   expect(w.models.main).toEqual([HAIKU, HAIKU])
 })
 

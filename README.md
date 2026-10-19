@@ -88,8 +88,8 @@ Claude Code lê direto desta pasta: editou um mod, rode `/reload-plugins` ou abr
 | `replay-theater` | `/replay` passa pelas edições do último turno, um diff por vez | hamzafer/claude-code-mods, MIT, traduzido |
 | `cache-clock` | Linha do cache do prompt sob a status line (`/cache-clock setup`) | hamzafer/claude-code-mods, MIT, traduzido |
 | `after` | Fila de prompts: `/after <tarefa>` roda depois da tarefa atual, sem interromper; `/after` mostra e edita a fila | [midudev/better-claude](https://github.com/midudev/better-claude), MIT |
-| `use-haiku` | Prompt começando com `_` roda aquele turno no Haiku | midudev/better-claude, MIT |
-| `think-hard` | Prompt começando com `+` pensa com esforço máximo naquele turno | midudev/better-claude, MIT |
+| `use-haiku` | Prompt começando com `_` roda o turno principal no Haiku; os subagentes mantêm o modelo definido neles | midudev/better-claude, MIT, alterado: não força os subagentes |
+| `think-hard` | Prompt começando com `+` pensa com esforço máximo no turno principal; os subagentes mantêm o esforço definido neles | midudev/better-claude, MIT, alterado: não força os subagentes |
 | `blast-radius` | Segura comandos destrutivos até a pessoa liberar. Fica no repositório, desinstalado | própria |
 
 As faixas acima do prompt seguem o protocolo `hooks/bands.ts` do hamzafer (uma coluna `bands`

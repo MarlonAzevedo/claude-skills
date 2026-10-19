@@ -1,7 +1,5 @@
-import { atom, read, update } from 'claude-code'
+import { atom, read } from 'claude-code'
 import type { EngineInterface, PromptOrigin, Register } from 'claude-code'
-
-import type { AgentIds } from '../types'
 
 const MARK = '_'
 const HAIKU = 'claude-haiku-5-5'
@@ -9,11 +7,9 @@ const COLOR = 'suggestion'
 
 const MARKED = { plugin: 'use-haiku', key: 'marked' } as const
 const TURN = { plugin: 'use-haiku', key: 'turn' } as const
-const AGENTS = { plugin: 'use-haiku', key: 'agents' } as const
 
 const marked = atom(MARKED, false)
 const haikuTurn = atom(TURN, null as string | null)
-const haikuAgents = atom(AGENTS, [] as AgentIds)
 
 // `_summarize the diff` is marked; `__init__.py fails` is not.
 const isMarked = (text: string) => text.startsWith(MARK) && !text.startsWith(MARK + MARK)
@@ -82,25 +78,10 @@ export const register: Register = on => {
     return next(e)
   })
 
-  // Every request of a Haiku turn goes to Haiku: the main loop's and those of the subagents it started.
+  // Only the main loop's requests go to Haiku: subagents keep the model and effort they were configured with.
   on('turn.step', async function* ($, e, next) {
-    const isHaiku = e.agentId === undefined
-      ? e.turnId === (await read($, haikuTurn))
-      : (await read($, haikuAgents)).includes(e.agentId)
+    const isHaiku = e.agentId === undefined && e.turnId === (await read($, haikuTurn))
     return yield* next(isHaiku ? { ...e, model: HAIKU } : e)
-  })
-
-  on('agent.spawn', async ($, e, next) => {
-    const isHaiku = !e.isTeammate && (e.parentAgentId === undefined
-      ? (await read($, haikuTurn)) !== null
-      : (await read($, haikuAgents)).includes(e.parentAgentId))
-    if (!isHaiku) return next(e)
-
-    // A fork inherits its parent's model and a workflow's agent keeps its own: turn.step catches theirs.
-    const result = await next(e.fork || e.workflow ? e : { ...e, model: HAIKU })
-    const id = result.deny === undefined ? result.agentId : undefined
-    if (id !== undefined) await update($, haikuAgents, ids => [...ids, id])
-    return result
   })
 
   on('turn.complete', async ($, e, next) => {

@@ -67,12 +67,12 @@
     {
       "name": "use-haiku",
       "source": "./use-haiku",
-      "description": "Prompt começando com _ roda aquele turno no Haiku (midudev/better-claude, MIT)."
+      "description": "Prompt começando com _ roda o turno principal no Haiku; subagentes mantêm o modelo deles (midudev/better-claude, MIT, alterado)."
     },
     {
       "name": "think-hard",
       "source": "./think-hard",
-      "description": "Prompt começando com + pensa com esforço máximo naquele turno (midudev/better-claude, MIT)."
+      "description": "Prompt começando com + pensa com esforço máximo no turno principal; subagentes mantêm o esforço deles (midudev/better-claude, MIT, alterado)."
     }
   ]
 }

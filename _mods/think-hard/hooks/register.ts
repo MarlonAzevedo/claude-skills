@@ -16,8 +16,9 @@ export const register: Register = on => {
     return next(e)
   })
 
-  // Every model request of a marked turn asks for max effort, when the model takes an effort at all.
+  // The main loop's requests of a marked turn ask for max effort, when the model takes an effort at all;
+  // subagents keep the effort they were configured with.
   on('turn.step', async function* ($, e, next) {
-    return yield* next(hardTurn && e.effort !== undefined ? { ...e, effort: 'max' } : e)
+    return yield* next(hardTurn && e.agentId === undefined && e.effort !== undefined ? { ...e, effort: 'max' } : e)
   })
 }
