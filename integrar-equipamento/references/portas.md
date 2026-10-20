@@ -184,9 +184,24 @@ Faça para o tipo novo e compare com os tipos 17 e 29 (faciais) e 42 (vários re
    WHERE id_equipamento = <id> AND excluido = 0 ORDER BY tipo, numero
    ```
    Equipamento já cadastrado antes de mudar as portas: salve de novo para o `Gerar_Portas` refazer.
+   Depois **sincronize com o Córtex** ("Atualizar EQUIPAMENTOS" na tela Sincronizar Equip., ou
+   `web/atualizar_dmi.php/?tabela=equipamento&conta=<conta>`) e confira a mesma consulta no MySQL do
+   Córtex: no FR300 a base já tinha 201/202 e o Córtex continuava com 310/311 até sincronizar.
 4. **Tela de comandos da base**: aparecem só os comandos do tipo, com a descrição certa; cada botão
    chega no módulo como `op = "cmd"` com o `pt` esperado (log do Córtex).
 5. **Tela de status do Córtex**: lista leitores, comandos e sensores do tipo, e o estado de relé
    e sensor muda na hora (`Leitor_Seta_Porta` + `Atualiza_Status_Porta` + `MsgClientes`, como no 42).
-6. **Bancada**: abrir/fechar a porta e apertar a botoeira geram o evento do sensor certo na base;
-   o relé abre pelo botão da tela.
+6. **Relé ao vivo**: cada comando pelo Córtex (`/equipamento/?op=cmd&ip=&tipo=&pt=<porta>&stat=1&tempo=800`)
+   responde e o aparelho age (confirmação do próprio aparelho, como o `Status/RemoteOpened` do
+   FR300, ou log `Porta <n> aberta`); `pt` fora da lista volta erro. Pela entrada: a validação de
+   uma tag liberada aciona o relé da entrada (`id_porta_rele`) e, com "Inibe Comando Rele" ligado,
+   não aciona.
+7. **Sensores ao vivo**: capture o aviso real do aparelho para cada sensor (formato e campos podem
+   diferir da documentação: o FR300 manda `Json={...}` cortado) e confira `processa_sensor` com a
+   porta certa, `one_status` e a tela de status do Córtex mudando; o mesmo estado repetido não gera
+   evento.
+8. **Bancada**: abrir/fechar a porta e apertar a botoeira geram o evento do sensor certo na base;
+   o relé abre pelo botão da tela; o que não foi visto fica como pendência escrita.
+
+Os passos 1 a 3 entram em teste automatizado; 6 e 7 no script de integração
+([testes.md](testes.md)); 4, 5 e 8 são conferidos na tela e na bancada.

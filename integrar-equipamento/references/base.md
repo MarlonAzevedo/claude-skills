@@ -35,6 +35,7 @@ Padrão, exemplos e a verificação obrigatória: [portas.md](portas.md).
 - **Lista `leitorfacial`**: se o equipamento é facial, inclua o tipo no
   `$('#leitorfacial').val([11, 17, 45, 18, 19, 23, 29, 52].indexOf(tipo) ...)`. É esse campo que
   faz o Córtex mandar faces para o aparelho.
+- **`atu_leitores()`** roda **depois** do ramo e mostra/esconde por listas fixas de tipos: `cfg_excallusr` só para `[7, 12, 18, 19, 20]` (inclua o tipo novo se ele atende `excallusr`), `grp_captura_facial`/`grp_facial`/`grp_libera_pulseira_facial` para todo `leitorfacial = 1`, `grp_forcar_ocad_tela` para quem não está na lista de exclusão. O que o ramo esconde e o `atu_leitores` mostra fica visível: confira a visibilidade final (teste jsdom, [testes.md](testes.md)).
 - **`MudouTipo()`**: um ramo `} else if (tipo == N) {` que mostra/esconde campos e botões. Mostre
   **só os botões cujas ops o módulo atende**: `CfgEquip('<op>')` manda a op direto para o Córtex
   (`equipamentos/config_equipamento.php` → `wsServidorLeitor(...):3000/equipamento/?op=...`).
@@ -61,7 +62,7 @@ depois do `ChamarWS`. Tela nova que mostre resposta do Córtex faz o mesmo.
 `testes/<equipamento>_tipo_test.php`, sem banco: inclui `adm/inc/funcoes.php`, confere o item de
 `lista_equipamentos()`, as portas de `lista_portas_equip_tipo(N, "LSC")` (com `utf8_encode` na
 descrição), a lista `leitorfacial` e o ramo do `MudouTipo` lidos do HTML por regex. Modelo:
-`testes/nice_fr300_tipo_test.php` (com `--filter=C2`). Rodar:
+`testes/nice_fr300_tipo_test.php` (com `--filter=C2`). Além dele, `testes/<equipamento>_tela.test.js` (jsdom, modelo `testes/nice_fr300_tela.test.js`, `node --test` na raiz da base) para a visibilidade final. Rodar:
 
 ```bash
 docker exec wsoneportaria php /var/www/html/wsOnePortaria/testes/<equipamento>_tipo_test.php

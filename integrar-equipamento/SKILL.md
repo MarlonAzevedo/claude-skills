@@ -1,6 +1,6 @@
 ---
 name: integrar-equipamento
-description: Integra um equipamento novo (leitor facial, controladora de acesso, módulo de relés) no Córtex da ONE (One Portaria) nos dois lados — base wsOnePortaria (tipo novo em lista_equipamentos, portas em lista_portas_equip_tipo, tela MudouTipo, Windows-1252 + CRLF) e Córtex (módulo node/api_<fabricante>.js com as ops versao/online/ping/cmd/setadata/sincusuarios/excusr/excallusr, rota de push, despacho em api_equipamentos.js, status das portas, imagem, testes node:test) — com investigação do aparelho antes do plano, plano pela tlc-spec-lean, testes de regressão e documentação na documentacao-one. Use quando o usuário pedir "integrar equipamento", "novo tipo de equipamento", "integrar o leitor X no Córtex", "suporte à controladora Y", "cadastrar fabricante novo no Córtex".
+description: Integra um equipamento novo (leitor facial, controladora de acesso, módulo de relés) no Córtex da ONE (One Portaria) nos dois lados — base wsOnePortaria (tipo novo em lista_equipamentos, portas em lista_portas_equip_tipo, tela MudouTipo, Windows-1252 + CRLF) e Córtex (módulo node/api_<fabricante>.js com as ops versao/online/ping/cmd/setadata/sincusuarios/excusr/excallusr, rota de push, despacho em api_equipamentos.js, status das portas, imagem, testes node:test) — com investigação do aparelho antes do plano, plano pela tlc-spec-lean, testes de regressão, validação de cada função da tela de equipamento e da tela Sincronizar Equip. no aparelho real (script de integração), verificação das portas ao vivo e documentação na documentacao-one. Use quando o usuário pedir "integrar equipamento", "testar as funções do equipamento", "validar as portas", "novo tipo de equipamento", "integrar o leitor X no Córtex", "suporte à controladora Y", "cadastrar fabricante novo no Córtex".
 ---
 
 # Integrar equipamento no Córtex (ONE)
@@ -53,11 +53,23 @@ Nada de chutar rota, campo ou código de erro do aparelho: tudo o que o módulo 
 6. **Base**: tipo, tela, encoding: [references/base.md](references/base.md).
 7. **Córtex**: módulo, rota de push, despacho, status das portas, imagem, testes:
    [references/cortex.md](references/cortex.md).
-8. **Testes de regressão** em `testes/` de cada repositório (permanentes, versionados), escritos
-   a partir dos checks; todo bug achado na bancada ganha teste que falha antes do fix.
+8. **Testes** em `testes/` de cada repositório (permanentes, versionados), escritos a partir dos
+   checks; todo bug achado ganha teste que falha antes do fix. **Sem o usuário pedir**, cubra o
+   roteiro inteiro de [references/testes.md](references/testes.md):
+   - cada botão e opção da tela de equipamento que fica visível para o tipo (teste jsdom da
+     visibilidade final, depois do `atu_leitores`) e o efeito de cada um no aparelho;
+   - a tela "Sincronizar Equip." (o que reflete e o que não reflete no aparelho) e o envio
+     completo das fotos;
+   - as ações por pessoa que o Córtex manda a todos os faciais (`sincusuarios` com `cd_acesso` e
+     com lista, `excfoto`, `excusr` via `expirartag`, `capfoto`);
+   - robustez (Córtex reiniciado, aparelho reiniciado, ping perdido, `op=ping` pela rota HTTP);
+   - script `testes/<equipamento>_integracao.sh --filter=Cn` contra o aparelho real e a base;
+   - verificação das portas ao vivo (passos 6 e 7 de [references/portas.md](references/portas.md)).
 9. **Bancada**: Córtex do Docker cadastrado na conta como **1º IP do `ws_modulo`**, aparelho
-   apontando para o IP público do Córtex. Conferir de verdade: versão, ping, ativar, sincronizar
-   faces, reconhecimento liberado e negado, relé, sensores, reinício do aparelho.
+   apontando para o IP público do Córtex, de preferência na **mesma rede** do aparelho (pela VPN
+   pode haver NAT e MTU menor). Conferir de verdade o que só o aparelho mostra (seção 7 de
+   `testes.md`): reconhecimento liberado e negado na tela dele, relé, sensores, captura com rosto,
+   comportamento com o Córtex fora do ar.
 10. **Verificação independente** da `tlc-spec-lean` (verificador novo a cada rodada, nunca o
    autor), quantas rodadas forem precisas.
 11. **Documentação** na `documentacao-one` no fim (ver Entrega). Commit local nos dois
@@ -89,7 +101,16 @@ Cada uma derrubou o Node ou travou a integração na bancada. Trate como requisi
   inteligente" de outra plataforma ligado no aparelho rouba os eventos — confira e anote o
   original antes de trocar.
 - **Log**: `global.Log(msg, false, true)` só vai para o painel (WebSocket), não para o
-  `docker logs`.
+  `docker logs`; e o Córtex zera o `nivel_log` 10 s depois de fechar a página `/config`.
+- **Configuração repetida** pode derrubar o aparelho (no FR300 a assinatura repetida o
+  reiniciava): guarde os IDs do que criou (arquivo fora do git, aprendido também do `Reference`
+  dos avisos) e apague antes de recriar; nunca teste existência com `POST`.
+- **Aviso fora do formato documentado**: os alarmes do FR300 chegam como `Json={...}` com o
+  `Content-Length` sem o prefixo (corpo cortado). Capture o tráfego real antes do parser.
+- **Firmware sem o comando de lote** (FR300 B2212.2.6 sem `DelLibPeople`): o "Zerar Usuários"
+  precisa de plano B.
+- **Aparelho atrás de NAT** (VPN) chega com outro IP: identifique pelo serial do aviso, só entre
+  equipamentos do tipo.
 - **SQL Server pela linha de comando**: script PHP no container grava acento errado
   (`Relé` → `Rel?`); use `CHAR(233)` ou o caminho da tela.
 - **`ws_modulo` com IP inalcançável** trava a sincronização ("Atualizar DMI") e a sessão: os
@@ -103,6 +124,7 @@ Base (`wsOnePortaria`):
 - [ ] Tipo na lista `leitorfacial` (se facial) e ramo no `MudouTipo()` com só os botões que o módulo atende, usuário/senha padrão de fábrica
 - [ ] Windows-1252 + CRLF preservados (`file`, `git diff` sem linha inteira trocada)
 - [ ] Teste em `testes/<equipamento>_tipo_test.php` passando no container
+- [ ] Teste jsdom `testes/<equipamento>_tela.test.js`: visibilidade final dos botões e opções do tipo (depois do `atu_leitores`); tipo incluído nas listas do `atu_leitores` que valem para ele
 
 Córtex (`cortex`):
 - [ ] `node/api_<fabricante>.js` com `Api(param, callback)` e as ops; erro claro para op não implementada
@@ -110,7 +132,10 @@ Córtex (`cortex`):
 - [ ] `else if (param.tipo == N)` em `api_equipamentos.js` antes do `ping` genérico
 - [ ] Tipo na lista de `Listar_Placas_Cortex5` e ramo em `Ler_Status_Portas_Equip`
 - [ ] Módulo grava o estado (`Leitor_Seta_Porta`, `Atualiza_Status_Porta`, `MsgClientes`) e só avisa `processa_sensor` quando muda (como o 29 e o 42)
-- [ ] Verificação das portas feita (os 6 passos de `references/portas.md`)
+- [ ] Verificação das portas feita (os 8 passos de `references/portas.md`, 6 e 7 ao vivo)
+- [ ] Ops gerais atendidas: `sincusuarios` (com `cd_acesso` e com `usuarios`), `excfoto`, `excusr`, `excallusr` (com plano B), `capfoto`/`capfotocanc`/`capbiocanc`, `setadata`
+- [ ] Roteiro de [references/testes.md](references/testes.md) coberto: tela (jsdom), funções da tela no aparelho, Sincronizar Equip., envio completo, ações por pessoa, robustez
+- [ ] `testes/<equipamento>_integracao.sh` passando contra o aparelho real, um check por vez, com limpeza e restauração
 - [ ] `images/equipN.png` e `ARQUITETURA.md` (árvore de módulos e tabela de tipos)
 - [ ] `testes/<equipamento>.test.js` (`node --test`) passando, com os testes existentes de `testes/` de novo
 

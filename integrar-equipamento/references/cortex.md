@@ -18,8 +18,11 @@ Contrato: `Api(param, callback)`, `callback(erro, retorno)` com `erro = false` n
 | `cmd` | Aciona a porta `param.pt` com `param.stat` (`"0"` em pulso não faz nada e devolve OK); porta desconhecida é erro | `"Comando enviado"` |
 | `setadata` | Acerta data/hora com `global.cfg.fuso` | `"OK"` |
 | `sincusuarios` | `global.Sql_Pessoas_TagConvite_ativos(param, "'f'", null)` + `global.executa`, só quem tem `/var/www/fotos/f<cd_acesso>.jpg` (`global.Existe_Arquivo`); fila com `setTimeout` e progresso por `global.MsgClientes('sts_sinc', {ip, serial, perc, tipo: "foto"})`; inclusão que falha tenta alterar | `"OK"` (responde logo, a fila segue) |
-| `excusr` | Exclui `param.cd_acesso` | `"OK"` |
-| `excallusr` | Limpa todas as pessoas | `"OK"` |
+| `sincusuarios` com `param.usuarios` | Lista pronta (`SincUsuariosSecundarios`, captura em outro facial): envia **só** ela, sem consultar o banco | `"OK"` |
+| `excusr` | Exclui `param.cd_acesso` (também chega pelo `expirartag`, bloqueio na saída) | `"OK"` |
+| `excfoto` | Base excluiu a face ou a pessoa (`excluirFaceEquipamentos`): tira a face ou a pessoa | `"OK"` |
+| `excallusr` | Limpa todas as pessoas; se o firmware não tem o comando de lote, responde OK e apaga uma a uma em segundo plano | `"OK"` |
+| `capfoto` / `capfotocanc` / `capbiocanc` | Captura de foto pelo aparelho (Plus/aba Web) com `MsgClientes("face", {status: "iniciada"/"cadastrada"/"falha"})`, `EnviarFotoBase` e `SincUsuariosSecundarios`; cancelar encerra | `"OK"` |
 | outra | — | `callback("Erro: Op não implementada no <Equip>: " + param.op, "")` |
 
 Op chamada pela tela vai para `response.end()` do Node 0.10: devolva **texto**, nunca número ou
@@ -87,6 +90,9 @@ antes do `else if ( param.op == "ping")` genérico (senão o ping do tipo novo v
 - `ARQUITETURA.md`: módulo na árvore de `node/` e linha na tabela de tipos.
 
 ## Testes (`testes/<equipamento>.test.js`, `node:test`)
+
+Roteiro completo (tela, Sincronizar Equip., ações por pessoa, robustez, integração com o aparelho
+real): [testes.md](testes.md). Abaixo, só o harness do unitário.
 
 O `api.js` **não** é carregado (sobe servidor e banco ao carregar): os pontos dele são conferidos
 no código-fonte por regex (require/global, rota antes do `/log`, lista de
