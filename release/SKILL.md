@@ -1,6 +1,6 @@
 ---
 name: release
-description: Cortar e publicar uma versão de qualquer projeto — derivar/confirmar o número (patch/minor/major) a partir do CHANGELOG e do que se acumulou, bumpar a versão onde o projeto a guarda, fechar a seção "Não lançado", rodar pos-auditoria quando houver commits sem auditoria, seguir a estratégia de branch do repo e só criar a tag anotada com o CI verde no SHA exato. Use quando o usuário pedir "release", "lançar versão", "cortar uma minor/patch", "publicar a 2.1", "taguear", "fechar o changelog". Não roda sozinha — só com pedido explícito.
+description: Cortar e publicar uma versão de qualquer projeto — derivar/confirmar o número (patch/minor/major) a partir do CHANGELOG e do que se acumulou, bumpar a versão onde o projeto a guarda, fechar a seção "Não lançado", rodar pos-auditoria quando houver commits sem auditoria, seguir a estratégia de branch do repo e só criar a tag anotada com o CI verde no SHA exato. Use quando o usuário pedir "release", "lançar versão", "cortar uma minor/patch", "publicar a 2.1", "taguear", "fechar o changelog", "gerar versão", "lançamento da sprint" (na ONE, segue o modelo de lançamento da documentacao-one). Não roda sozinha — só com pedido explícito.
 ---
 
 # Release
@@ -11,6 +11,26 @@ Skills pessoais têm precedência sobre as de projeto com o mesmo nome. Por isso
 se o repositório atual (`git rev-parse --show-toplevel`) tiver
 `.claude/skills/release/SKILL.md`, siga essa versão específica do projeto no
 lugar desta. Só continue aqui se ela não existir.
+
+**Lançamento de versão da ONE (One Portaria).** Pedido de "gerar versão",
+"lançamento da sprint" ou release de um projeto da ONE (`htdocs`,
+`~/Documentos/portaria/...`): não siga as fases abaixo. Dê `git pull` em
+`~/Documentos/Obsidian-cell/ONE/documentacao-one`, siga o `AGENTS.md` dele e
+o modelo `Sprints/Lançamento de versão.md`, que é a fonte única de regras,
+ordem dos sistemas, passos, testes e tags. Os pontos que já deram problema e
+não podem ser pulados:
+
+- comece cada sistema pelo passo `conferir branch local` (o clone pode estar
+  numa feature ou com alteração pendente) e faça o `git checkout` da branch
+  de cada passo antes de rodá-lo;
+- ida: `master` (ou `main`) com `pull`, `develop` com `pull`, merge da
+  `master` na `develop`, testes e correção das inconsistências; volta: sem
+  `pull`, merge da `develop` na `master`, testes e conferência da versão;
+- versão sugerida: sobe o número do meio e zera o último (`4.15.3` →
+  `4.16.0`); o primeiro só muda a pedido do usuário, e o último é dos devs
+  (versões intermediárias). Confirme com o usuário antes de gravar;
+- siga a ordem do checklist do modelo (ex.: Tela do porteiro logo depois do
+  Plus), um sistema por vez.
 
 Esta skill transforma o que se acumulou na linha principal numa versão
 tagueada e publicada. Resolver itens nunca autoriza tag, bump ou deploy: isso
