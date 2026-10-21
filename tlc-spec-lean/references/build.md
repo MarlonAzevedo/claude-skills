@@ -168,8 +168,8 @@ inherits none of its tokens, and reports a pass over four checks that reads exac
 over forty.
 
 If you hold the whole feature - you wrote every check's commit, or the last batch just returned
-green to you - you are the orchestrator. Dispatch the Verifier in that same turn. Do not ask.
-Do not wait for "verify work". See [verify.md](verify.md).
+green to you - you are the orchestrator. Ask the user whether to verify, and dispatch the
+Verifier on a yes. See [verify.md](verify.md).
 
 ## What was deliberately removed
 

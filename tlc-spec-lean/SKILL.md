@@ -57,11 +57,12 @@ never scale down with the profile.
    and `Surface` are additive - a door discovered while building gets a row before the code that
    closes it, and a row the user approved is never rewritten. `Flow` and `Impact` are neither:
    they are **kept true**, so a different path changes the hop in that path's commit.
-5. The **Verifier is a fresh sub-agent**, never the author, never optional, never waiting to
-   be asked. Whoever holds the whole feature dispatches it after the **last commit of the
-   feature** lands - over `<feature base>..HEAD`, with **every** check. Never by a builder,
-   and never as a child of one. A builder finishes, reports, and stops. The work is not done
-   at the last commit; it is done when the Verifier's report accounts for every check.
+5. The **Verifier is a fresh sub-agent**, never the author. A round costs a lot of tokens, so
+   it runs **only when the user says yes**: after the **last commit of the feature** lands,
+   whoever holds the whole feature asks in one line whether to verify, and dispatches it on a
+   yes - over `<feature base>..HEAD`, with **every** check. Never by a builder, and never as a
+   child of one. A builder finishes, reports, and stops. Until a Verifier's report accounts
+   for every check, report the feature as built and **not verified** - never as verified.
 6. **The profile is a floor and it is not a secret.** The verification report names it, or "no
    faults injected" reads exactly like forgetting to inject them.
 7. The completion gate is a script, not a feeling: `validate_verification.py` must exit 0.
@@ -196,9 +197,10 @@ budget, the user's mechanism choice. Write the tests from the checks, implement,
 proof, commit in coherent pieces. No task list, no per-task review tables. Boundaries,
 `Landing` timing, handoff and the scope guardrail: [build.md](references/build.md).
 
-**Verify** - when the last commit of the feature lands, dispatch a fresh Verifier in the
-same turn. Do not ask. Do not wait for "verify work". Gaps go back as fix work and a new fresh
-Verifier re-checks, for as many rounds as it takes until everything passes. Procedure, report
+**Verify** - when the last commit of the feature lands, ask the user in one line whether to
+run a verification round, and dispatch a fresh Verifier only on a yes. After a fix, ask again
+rather than re-verifying on your own. Gaps go back as fix work; each new round is a fresh
+Verifier, and each one needs the user's yes. Procedure, report
 format and scoped re-verification: [verify.md](references/verify.md).
 
 Durable memory - project decisions, session handoff, and the lessons layer:
@@ -269,8 +271,8 @@ Record the chosen mechanism on the same `## Handoff` line before the first line 
 Batches run sequentially and only hand off on green. The next builder reads `checks.md` and
 the **diff** of what landed, never a narrative summary.
 
-When the last batch returns green, the parent dispatches the Verifier in that same turn.
-Do not ask. A builder never launches it.
+When the last batch returns green, the parent asks the user whether to verify and dispatches
+the Verifier on a yes. A builder never launches it.
 
 What else needs a decision is the profile, a live alternative in `Landing`, and anything
 the refuse-rather-than-guess gate caught.
@@ -317,7 +319,7 @@ Actions:
 2. Run `python3 <skill-dir>/scripts/validate_checks.py lockfile-v2`
 3. Write `## Handoff` with the arithmetic. Under the budget: one builder, no ask. Over: stop and ask (handoff vs one builder); record the choice before any code
 4. Write tests from the checks — never from the implementation — then implement, run each proof, and commit
-5. After the last commit of the feature, dispatch a fresh Verifier with [verify.md](references/verify.md) — same turn, no ask. A builder of one batch would have stopped after step 4 instead.
+5. After the last commit of the feature, ask the user whether to verify; on a yes, dispatch a fresh Verifier with [verify.md](references/verify.md). A builder of one batch would have stopped after step 4 instead.
 
 Result: Proof-backed checks, green proofs, coherent commits, and a Verifier report that accounts for every check. The author does not write `verification.md`.
 

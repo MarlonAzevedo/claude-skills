@@ -3,12 +3,13 @@
 **Goal:** an independent answer to "is every check actually proven?", written as evidence rather
 than as an opinion.
 
-This is the only mechanism standing between "done" and a self-report, so it is never prompted,
-never optional, never waiting to be asked, and never skipped because the author feels confident.
+This is the only mechanism standing between "done" and a self-report, so it is never skipped
+because the author feels confident. A round is expensive, though, so it runs when the user
+says yes.
 
-**When:** the last commit of the feature has landed. Dispatch in that turn. The work is not done
-at that commit; it is done when this report accounts for every check. "verify work" is recovery
-for a feature that already landed without a report, not the happy path.
+**When:** the last commit of the feature has landed. Ask the user in one line whether to run a
+round, and dispatch on a yes - including after each fix. Until a report accounts for every
+check, the feature is built and **not verified**, and is reported that way.
 
 ## Author is not verifier
 

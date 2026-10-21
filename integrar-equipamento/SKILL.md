@@ -71,7 +71,8 @@ Nada de chutar rota, campo ou código de erro do aparelho: tudo o que o módulo 
    `testes.md`): reconhecimento liberado e negado na tela dele, relé, sensores, captura com rosto,
    comportamento com o Córtex fora do ar.
 10. **Verificação independente** da `tlc-spec-lean` (verificador novo a cada rodada, nunca o
-   autor), quantas rodadas forem precisas.
+   autor), só quando o usuário aceitar: no fim da entrega e depois de cada correção, perguntar
+   numa linha se ele quer verificar (cada rodada gasta muito token).
 11. **Documentação** na `documentacao-one` no fim (ver Entrega). Commit local nos dois
     repositórios; push e PR só quando o usuário pedir.
 
