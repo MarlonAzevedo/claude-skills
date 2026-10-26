@@ -16,7 +16,7 @@ Este diretório é o próprio repositório: editou uma skill, é só commitar aq
 | `commit` | Commits semânticos em português por grupo lógico, conferindo encoding e segredos; push só se escolher. Roda no Haiku | adaptada de [midudev/better-claude](https://github.com/midudev/better-claude) (`/commit`), MIT |
 | `limpar` | Achar e remover arquivos desnecessários (lixo, artefato rastreado, duplicado, órfão) com prova de não uso, aprovação e gate; levantamento em `scripts/candidatos.sh` | própria |
 | `salvar` | Registrar a sessão: docs do repo + memória de longo prazo (vault Obsidian do projeto, se existir) | própria |
-| `recado` | Conversa assíncrona entre agentes por arquivos: recado entre projetos (pego uma vez só) e handoff de sessão oferecido por id; `scripts/recado.py` | própria, com o protocolo de mensagens e handoff de [akitaonrails/ai-memory](https://github.com/akitaonrails/ai-memory) |
+| `recado` | Conversa assíncrona entre agentes pelo ai-memory: recado entre projetos (`ai-memory message`, pego uma vez só) e handoff de sessão (`memory_handoff_*`) | própria, sobre o protocolo de mensagens e handoff de [akitaonrails/ai-memory](https://github.com/akitaonrails/ai-memory) |
 | `integrar-equipamento` | Integrar equipamento novo no Córtex da ONE nos dois lados (base wsOnePortaria e módulo Node), com investigação do aparelho, armadilhas do FR300 e checklist de entrega | própria, a partir do guia `cortex-integrar-equipamento` da documentacao-one |
 | `tlc-spec-lean` | Features novas: plan → checks → build → verificador independente | [tech-leads-club/agent-skills](https://github.com/tech-leads-club/agent-skills), CC-BY-4.0. `SKILL.md` e `references/verify.md` alterados: reverificação sem limite de rodadas, sempre com verificador novo |
 | `harness-eval` | Auditar CLAUDE.md/AGENTS.md e skills (caminhos quebrados, redundância) | tech-leads-club/agent-skills, CC-BY-4.0. `scripts/inventory_extract.py` alterado: pula citações fora do repo |
@@ -47,9 +47,10 @@ ln -s ~/.claude/skills/_harness/hooks/captura-sessao.py ~/.claude/hooks/
 ```
 
 e acrescente ao `~/.claude/settings.json` os hooks `PreCompact` e `SessionEnd`
-com o comando `python3 -I ~/.claude/hooks/captura-sessao.py`, e o `SessionStart` com
-`python3 -I ~/.claude/skills/recado/scripts/recado.py aviso`. Para os outros agentes
-lerem a `recado`: `for d in ~/.agents/skills ~/.gemini/config/skills ~/.pi/agent/skills; do ln -s ~/.claude/skills/recado "$d/"; done`. Testes:
+com o comando `python3 -I ~/.claude/hooks/captura-sessao.py`. A `recado` usa o ai-memory:
+ligue os hooks e o MCP dele no Claude Code com `ai-memory install-hooks --agent claude-code --apply`
+e `claude mcp add --scope user --transport stdio ai-memory -- /usr/bin/ai-memory mcp-bridge --server-url http://127.0.0.1:49374/mcp`.
+Para os outros agentes lerem a `recado`: `for d in ~/.agents/skills ~/.gemini/config/skills ~/.pi/agent/skills; do ln -s ~/.claude/skills/recado "$d/"; done`. Testes:
 `for t in ~/.claude/skills/testes/test_*.py; do python3 -I "$t"; done`.
 
 Os mods (`_mods/`) formam o marketplace `claude-mods`, descrito em `.claude-plugin/marketplace.json` na raiz. Nesta máquina (onde os mods são editados), registre pela pasta; em outra máquina, sem clonar, registre pelo GitHub (as mudanças chegam depois do push, com `claude plugin marketplace update claude-mods`):
