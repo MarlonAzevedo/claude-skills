@@ -18,7 +18,7 @@ Este diretório é o próprio repositório: editou uma skill, é só commitar aq
 | `salvar` | Registrar a sessão: docs do repo + memória de longo prazo (vault Obsidian do projeto, se existir) | própria |
 | `recado` | Conversa assíncrona entre agentes pelo ai-memory: recado entre projetos (`ai-memory message`, pego uma vez só) e handoff de sessão (`memory_handoff_*`) | própria, sobre o protocolo de mensagens e handoff de [akitaonrails/ai-memory](https://github.com/akitaonrails/ai-memory) |
 | `integrar-equipamento` | Integrar equipamento novo no Córtex da ONE nos dois lados (base wsOnePortaria e módulo Node), com investigação do aparelho, armadilhas do FR300 e checklist de entrega | própria, a partir do guia `cortex-integrar-equipamento` da documentacao-one |
-| `tlc-spec-lean` | Features novas: plan → checks → build → verificador independente | [tech-leads-club/agent-skills](https://github.com/tech-leads-club/agent-skills), CC-BY-4.0. `SKILL.md` e `references/verify.md` alterados: reverificação sem limite de rodadas, sempre com verificador novo |
+| `tlc-spec-lean` | Features novas: plan → checks → build → verificador independente | [tech-leads-club/agent-skills](https://github.com/tech-leads-club/agent-skills), CC-BY-4.0, versão 2.1.0. `SKILL.md`, `references/build.md` e `references/verify.md` alterados: o Verifier só roda com o ok do usuário |
 | `harness-eval` | Auditar CLAUDE.md/AGENTS.md e skills (caminhos quebrados, redundância) | tech-leads-club/agent-skills, CC-BY-4.0. `scripts/inventory_extract.py` alterado: pula citações fora do repo |
 | `security-best-practices` | Specs de código seguro por linguagem/framework | tech-leads-club/agent-skills (originalmente openai/skills), Apache-2.0 (`LICENSE.txt`) |
 

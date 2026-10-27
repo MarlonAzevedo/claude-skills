@@ -1,6 +1,6 @@
 ---
 name: verificador
-description: Verificador independente e só de leitura que tenta refutar um achado, uma mudança ou um critério de aceite. Use quando uma skill pedir verificador novo/independente (auditoria-seguranca, tlc-spec-lean, pos-auditoria, harness-eval) ou antes de declarar pronto um trabalho grande.
+description: Verificador independente e só de leitura que tenta refutar um achado, uma mudança ou um critério de aceite. Use quando uma skill pedir verificador novo/independente (auditoria-seguranca, pos-auditoria, harness-eval; não o Verifier da tlc-spec-lean, que roda scripts e grava arquivos) ou antes de declarar pronto um trabalho grande.
 tools: Read, Grep, Glob
 model: sonnet
 effort: high
