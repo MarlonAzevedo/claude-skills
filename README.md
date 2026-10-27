@@ -8,15 +8,15 @@ aprovado.
 
 | Pasta | Origem | Commit | Licença | Nossa skill |
 |---|---|---|---|---|
-| `tlc-spec-lean`, `harness-eval` | [tech-leads-club/agent-skills](https://github.com/tech-leads-club/agent-skills) | 6df68d5 | CC-BY-4.0 | mesmo nome |
-| `security-best-practices` | tech-leads-club/agent-skills (originalmente openai/skills) | 6df68d5 | Apache-2.0 | mesmo nome |
+| `tlc-spec-lean`, `harness-eval` | [tech-leads-club/agent-skills](https://github.com/tech-leads-club/agent-skills) | 738451e | CC-BY-4.0 | mesmo nome |
+| `security-best-practices` | tech-leads-club/agent-skills (originalmente openai/skills) | 738451e | Apache-2.0 | mesmo nome |
 
 Atualizar: copiar as pastas novas por cima, commitar com o SHA de origem e ver
 o que mudou com `git diff upstream~1 upstream -- <pasta>`.
 
 ## Cópias de akitaonrails/my-skills
 
-Copiadas de [akitaonrails/my-skills](https://github.com/akitaonrails/my-skills) no commit `5763b9e` (`release` atualizada em `2ae1eb8`), com crédito ao autor. O repositório de origem não declara licença, mas o autor (Fabio Akita) autorizou o fork em 2026-10-14; trechos podem ser portados direto para a `main`, com crédito.
+Copiadas de [akitaonrails/my-skills](https://github.com/akitaonrails/my-skills) no commit `5763b9e` (`release` atualizada em `2ae1eb8`; todas conferidas em `f9c4384`), com crédito ao autor. O repositório de origem não declara licença, mas o autor (Fabio Akita) autorizou o fork em 2026-10-14; trechos podem ser portados direto para a `main`, com crédito.
 
 | Pasta | Nossa skill |
 |---|---|
