@@ -133,6 +133,12 @@ antes de rodá-la.
   fora do git **primeiro**, nunca imprimir nem testar a credencial. Correção de
   dependência é bump para a versão corrigida, não `--ignore`; ignore sem
   motivo documentado é dívida aberta.
+  Fechar alerta do code-scanning: `gh api -X PATCH "repos/$REPO/code-scanning/alerts/<n>"
+  -f state=dismissed -f 'dismissed_reason=false positive'` (ou `used in tests`,
+  `won't fix`; com espaço, não `false_positive`) `-f dismissed_comment="<a
+  fronteira que torna seguro>"`, comentário com até 280 caracteres. Não ponha
+  `lgtm[...]`/`codeql[...]` no código sem provar num scan que a linguagem
+  aceita supressão; sem suporte, só o fechamento pela API.
 - Verifique se alguém mexeu em configuração de scanner, ignores ou baselines
   no escopo. Resultado suprimido ou que não bloqueia o CI não é aprovação.
 
