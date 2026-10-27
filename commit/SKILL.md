@@ -25,13 +25,13 @@ Sem resposta possível, faça só o commit. Fique na branch atual, seja ela qual
 
 ## 2. Conferir antes de commitar
 
-Para cada arquivo modificado (`git diff --name-only HEAD`):
+Para cada arquivo modificado (`git diff --name-only HEAD`; em repositório sem commits, `git diff --cached --name-only` e `git status --short`):
 - **Encoding e quebras de linha iguais aos de antes:** compare `file` do arquivo com `git show HEAD:<arquivo> | file -`. Um `git diff` que troca o arquivo inteiro, ou que mostra `�`, indica encoding corrompido. Pare e avise.
 - **Nada de segredo:** `.env*`, `config.json` com credenciais, `configdb.php`, chaves e tokens nunca entram no `git add`. Se aparecerem no status, deixe de fora e avise.
 
 ## 3. Commitar por grupo
 
-Separe as mudanças em grupos lógicos (uma funcionalidade, uma correção, uma doc), um commit por grupo:
+Separe as mudanças em grupos lógicos (uma funcionalidade, uma correção, uma doc), um commit por grupo. Se o `Status` mostrar arquivo já no stage fora do primeiro grupo (ou segredo), rode `git reset` antes, para o primeiro commit não levar junto. Para cada grupo:
 1. `git add` só dos arquivos do grupo.
 2. Mensagem em **português**, no padrão Conventional Commits: `tipo(escopo): resumo` (tipos: feat, fix, refactor, style, docs, test, chore, build). Resumo no imperativo, até 72 caracteres. Corpo só quando o porquê não for óbvio.
 3. Termine a mensagem com as linhas de atribuição que o system-reminder da sessão indicar (`Co-Authored-By`, `Claude-Session`), quando houver.
