@@ -8,7 +8,8 @@ pass/fail run as the closing step. It reads the artifacts, never the target code
 
 What it checks:
   ERROR  - no verification.md, or no proofs.md (run check_proofs.py)
-  ERROR  - proofs.md written at another commit than HEAD, or over uncommitted changes
+  ERROR  - proofs.md written at a commit with code changed after it (commits only in .specs/ keep
+           it), or over uncommitted changes
   ERROR  - a check in checks.md with no row in proofs.md, or a row that is not `pass`
   ERROR  - checks.md names `Build:` commands and proofs.md has no Build row, or one that failed
   ERROR  - fewer mutation rows in proofs.md than checks.md's `Mutations:`, or one not killed
@@ -316,7 +317,11 @@ def _check_with_proofs(fdir, name, lines, checks_lines):
     if not m:
         errors.append(f"{name}: proofs.md names no `**HEAD**` - run check_proofs.py again")
     elif head and not (head.startswith(m.group(1)) or m.group(1).startswith(head)):
-        errors.append(f"{name}: proofs.md was written at {m.group(1)} and HEAD is {head} - run check_proofs.py again")
+        # Commits only in .specs/ (proofs.md, checks, lessons) keep the proofs: the code they ran is the same
+        changed = _code_changed_since(root, m.group(1))
+        if changed is None or changed:
+            errors.append(f"{name}: proofs.md was written at {m.group(1)} and HEAD is {head}, with code touched "
+                          f"after it ({', '.join((changed or ['git unavailable'])[:5])}) - run check_proofs.py again")
 
     tree = re.search(r"\*\*Tree\*\*\s*:\s*(\S+)", pbody)
     if tree and tree.group(1).lower().startswith("dirty"):

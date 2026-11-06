@@ -582,6 +582,34 @@ def run_tooling():
             ok = False
             print(f"  BROKEN  validate_verification.py: judged HEAD - kept: {kept.strip()[:200]} | stale: {stale.strip()[:200]}")
 
+    # proofs.md holds for the code it ran: a commit to .specs/ keeps it, a commit to code does not.
+    if shipped("validate_verification") and shutil.which("git"):
+        root = scaffold()
+        proofs = os.path.join(root, ".specs", "features", FEATURE, "proofs.md")
+
+        def git(*cmd):
+            return subprocess.run(["git", *cmd], cwd=root, capture_output=True, text=True).stdout.strip()
+
+        def commit(message):
+            git("add", "-A")
+            git("-c", "user.email=s@t", "-c", "user.name=selftest", "commit", "-qm", message)
+            return git("rev-parse", "--short", "HEAD")
+
+        git("init", "-q")
+        ran = commit("feat: the code")
+        write_artifact(proofs, read_artifact(proofs).replace("e4f5a6b", ran))
+        commit("docs: proofs.md")
+        _, kept = run("validate_verification", root)
+        write_artifact(os.path.join(root, "app.ts"), "export const late = true\n")
+        commit("fix: a change after the proofs")
+        _, stale = run("validate_verification", root)
+        shutil.rmtree(root, ignore_errors=True)
+        if "proofs.md was written at" not in kept and "code touched after it (app.ts)" in stale:
+            print("  ok      validate_verification.py: proofs.md survives a .specs commit and not a code commit")
+        else:
+            ok = False
+            print(f"  BROKEN  validate_verification.py: proofs HEAD - kept: {kept.strip()[:200]} | stale: {stale.strip()[:200]}")
+
     # the lessons store has to survive a real round-trip on disk, not only its unit checks
     if not shipped("lessons"):
         return ok

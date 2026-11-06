@@ -142,6 +142,12 @@ exit means stop and fix. Run a script rather than read it: its messages say what
 | At distillation | `lessons.py add ...` |
 | After editing a validator or template | `selftest.py` |
 
+`check_proofs.py` runs every proof and is the slow step: run it only at the stage points in the
+table - once when the build stops (before the Verifier) and once after the fix - never after each
+small edit. While building, run only the tests of the change. A commit that touches only `.specs/`
+(proofs.md, checks, lessons) does not owe a new run: the gate accepts proofs.md from an earlier
+commit when no code changed after it.
+
 `selftest.py` mutates the fixtures in `scripts/fixtures/` once per gate rule and requires every
 mutant to be killed; the fixtures are also a worked example of a passing artifact set.
 
