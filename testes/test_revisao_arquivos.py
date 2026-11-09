@@ -1,10 +1,10 @@
-"""Testes de analisar-tarefa/scripts/arquivos.sh. Rodar: python3 -I ~/.claude/skills/testes/test_analisar_tarefa_arquivos.py"""
+"""Testes de revisao/scripts/arquivos.sh. Rodar: python3 -I ~/.claude/skills/testes/test_revisao_arquivos.py"""
 import subprocess
 import tempfile
 import unittest
 from pathlib import Path
 
-SCRIPT = Path(__file__).resolve().parent.parent / "analisar-tarefa" / "scripts" / "arquivos.sh"
+SCRIPT = Path(__file__).resolve().parent.parent / "revisao" / "scripts" / "arquivos.sh"
 ENV = {"GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t", "GIT_COMMITTER_NAME": "t",
        "GIT_COMMITTER_EMAIL": "t@t", "PATH": "/usr/bin:/bin"}
 

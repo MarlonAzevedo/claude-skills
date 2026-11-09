@@ -1,7 +1,7 @@
 ---
-name: analisar-tarefa
-description: Analisa a tarefa da branch atual contra a base (feature/<base>/... → base; senão develop/main/master), incluindo o não commitado — gráfico do fluxo alterado, ordem de leitura, explicação de cada arquivo de código (sem docs de IA nem testes) com link que abre no Antigravity na linha alterada, código sem teste, placar dos testes, documentação desatualizada, pontos positivos, pontos de atenção e problemas com solução proposta. Use quando o usuário pedir "analisar tarefa", "analisa a branch", "explica o que mudou", "revisa o que foi feito", "/analisar-tarefa". Testes só são explicados quando ele pedir.
-allowed-tools: Bash(bash ~/.claude/skills/analisar-tarefa/scripts/*), Bash(git *), Bash(gh pr view *), Bash(iconv *), Bash(file *), Read, Grep, Glob, Agent
+name: revisao
+description: Analisa a tarefa da branch atual contra a base (feature/<base>/... → base; senão develop/main/master), incluindo o não commitado — gráfico do fluxo alterado, ordem de leitura, explicação de cada arquivo de código (sem docs de IA nem testes) com link que abre no Antigravity na linha alterada, código sem teste, placar dos testes, documentação desatualizada, pontos positivos, pontos de atenção e problemas com solução proposta. Use quando o usuário pedir "analisar tarefa", "analisa a branch", "explica o que mudou", "revisa o que foi feito", "/revisao". Testes só são explicados quando ele pedir.
+allowed-tools: Bash(bash ~/.claude/skills/revisao/scripts/*), Bash(git *), Bash(gh pr view *), Bash(iconv *), Bash(file *), Read, Grep, Glob, Agent
 ---
 
 # Analisar tarefa
@@ -10,13 +10,13 @@ Só lê e explica: não edita código nem documentação, não commita. Soluçõ
 
 ## Passo 0: versão do projeto primeiro
 
-Se `$(git rev-parse --show-toplevel)/.claude/skills/analisar-tarefa/SKILL.md` ou
-`.agents/skills/analisar-tarefa/SKILL.md` existir, siga essa versão.
+Se `$(git rev-parse --show-toplevel)/.claude/skills/revisao/SKILL.md` ou
+`.agents/skills/revisao/SKILL.md` existir, siga essa versão.
 
 ## Passo 1: levantar os arquivos
 
 ```bash
-bash ~/.claude/skills/analisar-tarefa/scripts/arquivos.sh "$(git rev-parse --show-toplevel)" [base]
+bash ~/.claude/skills/revisao/scripts/arquivos.sh "$(git rev-parse --show-toplevel)" [base]
 ```
 
 - Sem `base`, o script deduz pelo nome da branch (preferindo `origin/<base>`).
