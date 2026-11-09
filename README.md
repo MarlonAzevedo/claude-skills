@@ -15,6 +15,7 @@ Este diretório é o próprio repositório: editou uma skill, é só commitar aq
 | `refletir` | Kaizen: transformar erros reais em regras e skills | adaptada de akitaonrails/my-skills (`reflect`) |
 | `commit` | Commits semânticos em português por grupo lógico, conferindo encoding e segredos; push só se escolher. Roda no Haiku | adaptada de [midudev/better-claude](https://github.com/midudev/better-claude) (`/commit`), MIT |
 | `limpar` | Achar e remover arquivos desnecessários (lixo, artefato rastreado, duplicado, órfão) com prova de não uso, aprovação e gate; levantamento em `scripts/candidatos.sh` | própria |
+| `analisar-tarefa` | Analisar a branch contra a base: explica só os arquivos de código, com link que abre no Antigravity na linha alterada, pontos positivos, de atenção e problemas com solução; testes só quando pedir. Levantamento em `scripts/arquivos.sh` | própria |
 | `salvar` | Registrar a sessão: docs do repo + memória de longo prazo (vault Obsidian do projeto, se existir) | própria |
 | `recado` | Conversa assíncrona entre agentes pelo ai-memory: recado entre projetos (`ai-memory message`, pego uma vez só) e handoff de sessão (`memory_handoff_*`) | própria, sobre o protocolo de mensagens e handoff de [akitaonrails/ai-memory](https://github.com/akitaonrails/ai-memory) |
 | `integrar-equipamento` | Integrar equipamento novo no Córtex da ONE nos dois lados (base wsOnePortaria e módulo Node), com investigação do aparelho, armadilhas do FR300 e checklist de entrega | própria, a partir do guia `cortex-integrar-equipamento` da documentacao-one |
