@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Lista os arquivos da tarefa (branch vs base, incluindo o não commitado) em CODIGO, TESTES e IGNORADOS.
+# Lista os arquivos da tarefa (branch vs base, incluindo o não commitado) em CODIGO, TESTES, SEM_TESTE e IGNORADOS.
 # Uso: arquivos.sh [repo] [base]   — sem base, deduz pelo nome da branch (feature/<base>/...) ou develop/main/master.
 set -euo pipefail
 
@@ -50,19 +50,34 @@ add() { # status caminho
 	fi
 	if [[ $st == D ]]; then l="(removido)"; else l=$(url "$f" "$(linha "$f")"); fi
 	sec[$(classe "$f")]+="$st	$f	$n	$l"$'\n'
+	[[ $st != D && $(classe "$f") == CODIGO ]] && codigo+=("$f")
+	return 0
 }
+codigo=()
 
 while IFS=$'\t' read -r st a b; do
 	[[ $st == R* || $st == C* ]] && add "${st:0:1}" "$b" || add "$st" "$a"
 done < <(g diff --name-status -M "$mb")
 while IFS= read -r f; do add "?" "$f"; done < <(g ls-files --others --exclude-standard)
 
+# Código que nenhum teste do repo cita pelo nome (sem extensão)
+testes=()
+while IFS= read -r f; do
+	[[ -f $repo/$f && $(classe "$f") == TESTES ]] && testes+=("$repo/$f")
+done < <(g ls-files --cached --others --exclude-standard)
+semteste=""
+for f in "${codigo[@]}"; do
+	b=${f##*/}; b=${b%.*}
+	if ((${#testes[@]} == 0)) || ! grep -qF -- "$b" "${testes[@]}"; then semteste+="$f"$'\n'; fi
+done
+sec[SEM_TESTE]=$semteste
+
 echo "repo: $repo"
 echo "branch: $(g branch --show-current)"
 echo "base: $base"
 echo "merge-base: ${mb:0:12}"
 echo "diff: cd $(printf %q "$repo") && git -c difftool.ag.cmd='antigravity-ide --wait --diff \"\$LOCAL\" \"\$REMOTE\"' difftool -y -t ag ${mb:0:12}"
-for s in CODIGO TESTES IGNORADOS; do
+for s in CODIGO TESTES SEM_TESTE IGNORADOS; do
 	echo
 	echo "## $s"
 	printf '%s' "${sec[$s]:-(nenhum)$'\n'}"

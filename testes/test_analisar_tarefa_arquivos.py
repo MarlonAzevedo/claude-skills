@@ -35,7 +35,7 @@ class Arquivos(unittest.TestCase):
         escrever(r, "src/app.php", "linha1\nlinha2\nmudou\n")
         (r / "src/remover.js").unlink()
         escrever(r, "src/novo.ts", "a\n")
-        escrever(r, "testes/test_app.py", "t\n")
+        escrever(r, "testes/test_app.py", "from src import app\n")
         escrever(r, "src/app.spec.ts", "t\n")
         escrever(r, "docs/guia.md", "d\n")
         escrever(r, "AGENTS.md", "a\n")
@@ -99,6 +99,13 @@ class Arquivos(unittest.TestCase):
         self.assertIn("antigravity-ide --wait --diff", linha)
         self.assertIn(f"difftool -y -t ag {mb[:12]}", linha)
         self.assertNotIn("nvim", self.saida)
+
+    def test_sem_teste_lista_codigo_que_nenhum_teste_cita(self):
+        sem = self.secao("SEM_TESTE")
+        self.assertIn("src/novo.ts", sem)
+        self.assertIn("src/naocommitado.py", sem)
+        self.assertNotIn("src/app.php", sem)  # citado em testes/test_app.py
+        self.assertNotIn("src/remover.js", sem)  # removido
 
     def test_base_por_argumento(self):
         saida = self.rodar("HEAD~1")
