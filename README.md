@@ -59,7 +59,7 @@ Os mods (`_mods/`) formam o marketplace `claude-mods`, descrito em `.claude-plug
 ```bash
 claude plugin marketplace add ~/.claude/skills          # pela pasta
 # claude plugin marketplace add MarlonAzevedo/claude-skills   # pelo GitHub
-for m in progresso-agentes arvore-arquivos alerta-cache reflect guarda-encoding lembrete-doc-one context-bar usage-meter replay-theater cache-clock use-haiku think-hard; do claude plugin install "$m@claude-mods" --scope user; done
+for m in progresso-agentes arvore-arquivos alerta-cache guarda-encoding lembrete-doc-one context-bar usage-meter replay-theater cache-clock use-haiku think-hard; do claude plugin install "$m@claude-mods" --scope user; done
 ```
 
 O cache-clock ainda pede `/cache-clock setup` numa sessão. O after pede as opções na instalação: `claude plugin install after@claude-mods --scope user --config smart=true --config model=haiku --config display=band`. Testes: `for m in ~/.claude/skills/_mods/*/; do claude plugin test "$m"; done`.
@@ -84,7 +84,6 @@ Claude Code lê direto daqui: editou um mod, rode `/reload-plugins` ou abra outr
 | `progresso-agentes` | Barra de progresso das tarefas acima do prompt e painel `/subagentes` com modelo, passos e tokens | própria |
 | `arvore-arquivos` | Painel `/arvore`: arquivos que o Claude lê/edita agora e o estado de cada um no git | própria |
 | `alerta-cache` | Segura o envio quando o cache expirou numa conversa grande e diz quantos tokens vão ser reprocessados | própria |
-| `reflect` | Reclamação vira regra no `CLAUDE.md`/`AGENTS.md` do projeto ou no global, com um clique | própria |
 | `guarda-encoding` | Mantém encoding, BOM, CRLF/LF e final de arquivo; Windows-1252 (PHP legado) é lido e gravado pela guarda | própria |
 | `lembrete-doc-one` | Código alterado em `htdocs` (no Linux, nas pastas `docker-*`, opção `pastasCodigo`) aparece na linha de dicas como documentação pendente, sem interromper (as notas são escritas no fim da sessão ou quando pedir) | própria |
 | `context-bar` | Contexto em barra empilhada por categoria acima do prompt | [hamzafer/claude-code-mods](https://github.com/hamzafer/claude-code-mods), MIT, traduzido |
