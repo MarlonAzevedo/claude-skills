@@ -138,6 +138,12 @@ os ecossistemas cujos manifests existem no repo.
 - Imagens base por tag sem digest (risco aceito ou não?); `curl | sh` no
   build.
 - Tags/release: assinatura ou checksum; tag publicada nunca reescrita.
+- CI fora do GitHub (Azure Pipelines, GitLab, Jenkins): mesmos critérios de
+  gatilho, segredos e scripts.
+- Canal de atualização/deploy próprio (atualizador que baixa pacote, script
+  que aplica migração): origem autenticada, integridade do pacote, quem pode
+  disparar, rollback. Pacote `.zip`/binário versionado no repo é parte desse
+  canal ou lixo com código antigo exposto.
 - Dependabot/Renovate e alertas do GitHub lidos como evidência.
 
 ## 12. Indícios de código malicioso
@@ -211,9 +217,15 @@ colateral, desligar CSP/rate limit/auth.
   `secret_key_base`/credentials, Active Storage, signed ids, `config.hosts`.
 - Auditoria: Brakeman, `bundler-audit`.
 
-## 18. PHP (`composer.json`)
+## 18. PHP (`composer.json` ou arquivos `.php`)
 
 - Scripts/plugins do Composer, repositórios, pacotes por path/VCS.
+- PHP legado sem Composer: bibliotecas copiadas no repo (versão à mão),
+  helpers de banco do projeto (`consulta`, `executa`...) — confirme se recebem
+  parâmetros ou SQL concatenado em **todos** os chamadores; página que inclui
+  o arquivo de sessão/login (liste as que não incluem e por quê);
+  `include`/`require` com `$_GET`; `register_globals`/`extract`; uploads
+  servidos de pasta pública; `display_errors` ligado.
 - `exec`/`system`/`shell_exec`/backticks, `include`/`require` com caminho do
   usuário, `unserialize`, SQL com concatenação (use PDO com placeholders),
   `{!! !!}` no Blade, `extract($_REQUEST)`.

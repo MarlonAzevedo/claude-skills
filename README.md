@@ -9,7 +9,7 @@ Este diretório é o próprio repositório: editou uma skill, é só commitar aq
 |---|---|---|
 | `corrigir` | Resolver bug, pendência ou issue um por vez: teste de regressão antes do fix, gate, CI verde no SHA | adaptada de [akitaonrails/my-skills](https://github.com/akitaonrails/my-skills) (`github-resolution` + `iss-audit`) |
 | `pos-auditoria` | Auditar o intervalo `<base>..HEAD` antes de push em lote ou release | adaptada de akitaonrails/my-skills (`pr-post-audit`) |
-| `auditoria-seguranca` | Auditoria de segurança com threat model, verificação adversarial e `scripts/superficie.sh` | adaptada de akitaonrails/my-skills (`security-audit`), com ideias de cloudflare/security-audit-skill (MIT) |
+| `auditar` | Auditoria de segurança com threat model, cobertura rastreável (`cobertura.json`/`achados.json`), auditor e verificadores independentes e `scripts/superficie.sh`; contexto e limites vêm do projeto | adaptada de akitaonrails/my-skills (`security-audit`), com ideias de cloudflare/security-audit-skill (MIT) |
 | `release` | Cortar versão: semver pelo CHANGELOG, tag anotada só com CI verde. Na ONE, desvia para o modelo de lançamento da documentacao-one (branch local, versão pelo número do meio) | adaptada de akitaonrails/my-skills (`release`) |
 | `atualizar-deps` | Consolidar Dependabot/Renovate e desatualizados num commit, com piso de supply chain | adaptada de akitaonrails/my-skills (`pr-bump`) |
 | `refletir` | Kaizen: transformar erros reais em regras e skills | adaptada de akitaonrails/my-skills (`reflect`) |

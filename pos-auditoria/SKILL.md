@@ -94,7 +94,7 @@ Leia o diff inteiro com olhar hostil:
   SQL cru, webhooks, segredo em log ou em resposta de erro.
 - Arquivo binário, minificado, codificado ou com caractere Unicode de controle.
 
-Suspeita séria de fronteira quebrada → skill `auditoria-seguranca` (ou
+Suspeita séria de fronteira quebrada → skill `auditar` (ou
 `security-best-practices`) sobre o intervalo. Achado explorável bloqueia release.
 
 ## Fase 4 — Interação entre mudanças

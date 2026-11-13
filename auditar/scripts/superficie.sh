@@ -8,7 +8,7 @@
 # segredo: nas seções de segredo e env só sai caminho:linha + tipo/nome.
 # Dependências: bash, git, grep, awk, find.
 #
-# Uso: bash ~/.claude/skills/auditoria-seguranca/scripts/superficie.sh [raiz-do-repo]
+# Uso: bash ~/.claude/skills/auditar/scripts/superficie.sh [raiz-do-repo]
 set -uo pipefail
 
 ROOT="${1:-.}"
@@ -20,7 +20,7 @@ mapfile -t FILES < <(git ls-files -co --exclude-standard \
   | grep -vE '(^|/)(node_modules|vendor|target|dist|build|coverage|generated|\.venv|venv|__pycache__)/' \
   | grep -vE '\.(md|MD|rst|txt|png|jpe?g|gif|svg|ico|webp|woff2?|ttf|otf|pdf|zip|gz|tgz|lock|min\.js|map)$' \
   | grep -vE '(^|/)(package-lock\.json|pnpm-lock\.yaml|yarn\.lock|bun\.lockb?|Cargo\.lock|poetry\.lock|Gemfile\.lock|composer\.lock|go\.sum)$' \
-  | grep -vE '(^|/)auditoria-seguranca/scripts/superficie\.sh$' \
+  | grep -vE '(^|/)auditar/scripts/superficie\.sh$' \
   | while IFS= read -r f; do [[ -f "$f" && ! -L "$f" ]] && printf '%s\n' "$f"; done)
 
 pick() { printf '%s\n' "${FILES[@]}" | grep -E "$1"; }
@@ -51,7 +51,7 @@ section 'Ecossistemas detectados (aplique só as seções correspondentes do che
   pick '(^|/)(pyproject\.toml|requirements[^/]*\.txt|setup\.py|Pipfile)$' | head -1 | grep -q . && echo "Python: $(pick '(^|/)(pyproject\.toml|requirements[^/]*\.txt|setup\.py|Pipfile)$' | tr '\n' ' ')"
   pick '(^|/)go\.mod$' | head -1 | grep -q . && echo "Go: $(pick '(^|/)go\.mod$' | tr '\n' ' ')"
   pick '(^|/)(Gemfile|[^/]*\.gemspec)$' | head -1 | grep -q . && echo "Ruby: $(pick '(^|/)(Gemfile|[^/]*\.gemspec)$' | tr '\n' ' ')"
-  pick '(^|/)composer\.json$' | head -1 | grep -q . && echo "PHP: $(pick '(^|/)composer\.json$' | tr '\n' ' ')"
+  (( ${#PHP[@]} )) && echo "PHP: ${#PHP[@]} arquivo(s)$(pick '(^|/)composer\.json$' | head -1 | grep -q . && echo ", $(pick '(^|/)composer\.json$' | tr '\n' ' ')" || echo ', sem composer.json')"
   pick '(^|/)Cargo\.toml$' | head -1 | grep -q . && echo "Rust: $(pick '(^|/)Cargo\.toml$' | wc -l) Cargo.toml"
   pick '(^|/)(Dockerfile[^/]*|[^/]*\.Dockerfile)$' | head -1 | grep -q . && echo "Docker: $(pick '(^|/)(Dockerfile[^/]*|[^/]*\.Dockerfile)$' | tr '\n' ' ')"
   pick '(^|/)(docker-)?compose[^/]*\.ya?ml$' | head -1 | grep -q . && echo "Compose: $(pick '(^|/)(docker-)?compose[^/]*\.ya?ml$' | tr '\n' ' ')"
@@ -72,7 +72,7 @@ section 'SQL raw / montado em string'
   g '\.execute\(f["'"'"']|\.execute\([^)]*%|\.raw\(|\.extra\(|text\(f["'"'"']|executescript\(' "${PY[@]}"
   g 'fmt\.Sprintf\("(SELECT|INSERT|UPDATE|DELETE)|\.(Query|Exec)(Context)?\([^)]*\+' "${GO[@]}"
   g 'find_by_sql|\.where\("[^"]*#\{|execute\("[^"]*#\{' "${RB[@]}"
-  g '(mysqli_query|->query)\([^)]*\$|"(SELECT|INSERT|UPDATE|DELETE)[^"]*"\s*\.' "${PHP[@]}"
+  g '(mysqli_query|sqlsrv_query|odbc_exec|pg_query|mssql_query|->query)\([^)]*\$|"(SELECT|INSERT|UPDATE|DELETE|EXEC|select|insert|update|delete|exec)[^"]*("\s*\.|\$[A-Za-z_{])' "${PHP[@]}"
   g 'format!\("(SELECT|INSERT|UPDATE|DELETE)|sql_query\(' "${RS[@]}"
   g '(SELECT|INSERT|UPDATE|DELETE) [^;]*\$\{' "${JS[@]}"
 } | cap
@@ -173,6 +173,18 @@ if (( ${#WF[@]} )); then
 else
   echo "(nenhum workflow em .github/workflows)"
 fi
+
+section 'CI fora do GitHub (Azure, GitLab, Jenkins, Bitbucket, CircleCI): segredos, gatilhos e scripts'
+OCI=($(git ls-files -co --exclude-standard | grep -E '(^|/)(azure-pipelines[^/]*\.ya?ml|\.gitlab-ci\.yml|Jenkinsfile|bitbucket-pipelines\.yml|\.circleci/config\.ya?ml)$'))
+if (( ${#OCI[@]} )); then
+  printf '%s\n' "${OCI[@]}"
+  g '\$\(|\$\{\{|secret|variables:|trigger:|pr:|script:|curl|wget' "${OCI[@]}" | cap
+else
+  echo "(nenhum)"
+fi
+
+section 'Pacotes, binários e cópias rastreados (canal de update ou lixo com código antigo)'
+git ls-files | grep -iE '\.(zip|tar|tgz|gz|7z|rar|jar|war|phar|exe|dll|so|dylib|bin)$|\.(bak|old|orig|swp)(\.[a-z0-9]+)?$|~$|(^|/)[^/]*(\.bak|-old|_old| copy)\.[a-z0-9]+$' | cap
 
 DF=($(pick '(^|/)(Dockerfile[^/]*|[^/]*\.Dockerfile)$'))
 section 'Dockerfiles: FROM/USER, imagens sem digest, curl|sh, ARG/ENV com segredo'
