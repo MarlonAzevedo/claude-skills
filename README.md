@@ -62,6 +62,12 @@ claude plugin marketplace add ~/.claude/skills          # pela pasta
 for m in arvore-arquivos alerta-cache guarda-encoding lembrete-doc-one context-bar usage-meter replay-theater cache-clock use-haiku think-hard; do claude plugin install "$m@claude-mods" --scope user; done
 ```
 
+O painel do herdr (`_herdr/`) entra por link na pasta de mods do herdr-app:
+
+```bash
+ln -s ~/.claude/skills/_herdr/subagentes ~/.config/herdr-app/mods/subagentes
+```
+
 O cache-clock ainda pede `/cache-clock setup` numa sessão. O after pede as opções na instalação: `claude plugin install after@claude-mods --scope user --config smart=true --config model=haiku --config display=band`. Testes: `for m in ~/.claude/skills/_mods/*/; do claude plugin test "$m"; done`.
 
 ## `_harness/`
@@ -73,6 +79,14 @@ O cache-clock ainda pede `/cache-clock setup` numa sessão. O after pede as opç
 | `agents/executor-testes.md` | Roda testes e devolve só placar e falhas (Haiku) |
 | `agents/verificador.md` | Revisor só de leitura que tenta refutar um achado |
 | `hooks/captura-sessao.py` | Grava rascunho da sessão em `<vault>/_inbox` antes de compactar e no fim, sem LLM |
+
+## `_herdr/`
+
+Mods do [herdr](https://github.com/herdrdev/herdr) (painéis da janela do herdr-app), ligados por link em `~/.config/herdr-app/mods/`. Editou, o herdr recarrega sozinho; confira com `herdr-app check ~/.config/herdr-app/mods/<nome>`.
+
+| Mod | Para quê | Origem |
+|---|---|---|
+| `subagentes` | Painel com os subagentes de cada IA aberta no herdr: os internos do Claude Code e do Codex (modelo, passos, tokens, duração, último passo) e os terminais abertos com `hc run` por qualquer IA, mais a barra de tarefas do agente. Dados em `coletar.py` (só leitura, incremental); testes em `testes/test_herdr_subagentes.py` | própria |
 
 ## `_mods/`
 
