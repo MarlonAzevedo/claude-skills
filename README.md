@@ -59,7 +59,7 @@ Os mods (`_mods/`) formam o marketplace `claude-mods`, descrito em `.claude-plug
 ```bash
 claude plugin marketplace add ~/.claude/skills          # pela pasta
 # claude plugin marketplace add MarlonAzevedo/claude-skills   # pelo GitHub
-for m in progresso-agentes arvore-arquivos alerta-cache guarda-encoding lembrete-doc-one context-bar usage-meter replay-theater cache-clock use-haiku think-hard; do claude plugin install "$m@claude-mods" --scope user; done
+for m in arvore-arquivos alerta-cache guarda-encoding lembrete-doc-one context-bar usage-meter replay-theater cache-clock use-haiku think-hard; do claude plugin install "$m@claude-mods" --scope user; done
 ```
 
 O cache-clock ainda pede `/cache-clock setup` numa sessão. O after pede as opções na instalação: `claude plugin install after@claude-mods --scope user --config smart=true --config model=haiku --config display=band`. Testes: `for m in ~/.claude/skills/_mods/*/; do claude plugin test "$m"; done`.
@@ -81,7 +81,7 @@ Claude Code lê direto daqui: editou um mod, rode `/reload-plugins` ou abra outr
 
 | Mod | Para quê | Origem |
 |---|---|---|
-| `progresso-agentes` | Barra de progresso das tarefas acima do prompt e painel `/subagentes` com modelo, passos e tokens | própria |
+| `progresso-agentes` | Barra de progresso das tarefas acima do prompt e painel `/subagentes` com modelo, passos e tokens. Fica no repositório, desinstalado: substituído pelo painel Subagentes do herdr, que cobre todas as IAs | própria |
 | `arvore-arquivos` | Painel `/arvore`: arquivos que o Claude lê/edita agora e o estado de cada um no git | própria |
 | `alerta-cache` | Segura o envio quando o cache expirou numa conversa grande e diz quantos tokens vão ser reprocessados | própria |
 | `guarda-encoding` | Mantém encoding, BOM, CRLF/LF e final de arquivo; Windows-1252 (PHP legado) é lido e gravado pela guarda | própria |
